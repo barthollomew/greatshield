@@ -139,4 +139,5 @@ logs/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db
+Thumbs.dbgreatshield.db-shm
+greatshield.db-wal
