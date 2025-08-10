@@ -3,7 +3,7 @@ import { DatabaseManager, BotConfig } from '../database/DatabaseManager';
 import { OllamaManager } from '../ollama/OllamaManager';
 import { Logger } from '../utils/Logger';
 import { ModerationPipeline } from '../moderation/ModerationPipeline';
-import { GreatshieldBot } from './GreatshieldBotRefactored';
+import { GreatshieldBot } from './GreatshieldBot';
 import { DiscordEventHandler } from './DiscordEventHandler';
 import { ModerationLogService } from './ModerationLogService';
 
@@ -146,7 +146,7 @@ export function createContainer(
       const moderationLogServiceFactory = c.resolve<(config: BotConfig) => ModerationLogService>(TOKENS.ModerationLogService);
       const moderationLogService = moderationLogServiceFactory(config);
       
-      return new GreatshieldBot(db, moderationPipeline, logger, eventHandler, moderationLogService);
+      return new GreatshieldBot(config, db, moderationPipeline, logger, eventHandler, moderationLogService);
     };
   });
 

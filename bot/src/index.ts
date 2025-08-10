@@ -8,6 +8,8 @@ import { OllamaManager } from './ollama/OllamaManager';
 import { GreatshieldBot } from './core/GreatshieldBot';
 import { SetupWizard } from './cli/SetupWizard';
 import { Logger } from './utils/Logger';
+import { createContainer, TOKENS } from './core/DIContainer';
+import { BotConfig } from './database/DatabaseManager';
 
 // Load environment variables
 dotenv.config();
@@ -77,12 +79,34 @@ program
         process.exit(1);
       }
 
-      // Initialize components
-      const db = new DatabaseManager(process.env['DATABASE_PATH']);
+      // Initialize DI container
+      const container = createContainer(
+        process.env['DATABASE_PATH'],
+        process.env['OLLAMA_HOST'],
+        process.env['LOG_LEVEL'],
+        process.env['LOG_FILE']
+      );
+
+      // Initialize database
+      const db = container.resolve<DatabaseManager>(TOKENS.DatabaseManager);
       await db.initialize();
-      
-      const ollama = new OllamaManager(process.env['OLLAMA_HOST']);
-      const bot = new GreatshieldBot(db, ollama, logger);
+
+      // Get guild configuration
+      const guildId = process.env['DISCORD_GUILD_ID'];
+      if (!guildId) {
+        console.error(chalk.red('❌ Discord guild ID not found. Please run "greatshield setup" first.'));
+        process.exit(1);
+      }
+
+      const config = await db.getBotConfig(guildId);
+      if (!config) {
+        console.error(chalk.red('❌ Bot configuration not found. Please run "greatshield setup" first.'));
+        process.exit(1);
+      }
+
+      // Create bot instance with DI container
+      const botFactory = container.resolve<(config: BotConfig) => GreatshieldBot>(TOKENS.GreatshieldBot);
+      const bot = botFactory(config);
 
       // Setup graceful shutdown
       const shutdown = async (signal: string) => {
