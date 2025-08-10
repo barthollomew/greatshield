@@ -1,24 +1,23 @@
 import { Message } from 'discord.js';
-import { DatabaseManager, BotConfig } from '../database/DatabaseManager.js';
-import { OllamaManager } from '../ollama/OllamaManager.js';
-import { Logger } from '../utils/Logger.js';
-import { FastPassFilter } from './filters/FastPassFilter.js';
-import { RAGSystem } from './RAGSystem.js';
-import { ModerationActions, ActionResult } from './actions/ModerationActions.js';
+import { DatabaseManager, BotConfig } from '../database/DatabaseManager';
+import { OllamaManager } from '../ollama/OllamaManager';
+import { Logger } from '../utils/Logger';
+import { FastPassFilter } from './filters/FastPassFilter';
+import { RAGSystem } from './RAGSystem';
+import { ModerationActions, ActionResult } from './actions/ModerationActions';
 
 export interface ModerationResult {
   actionTaken: string;
   detectionType: 'fast_pass' | 'ai_analysis';
-  ruleTriggered?: string;
+  ruleTriggered?: string | undefined;
   confidenceScores: {[key: string]: number};
-  reasoning?: string;
+  reasoning?: string | undefined;
   success: boolean;
-  error?: string;
+  error?: string | undefined;
 }
 
 export class ModerationPipeline {
   private db: DatabaseManager;
-  private _ollama: OllamaManager;
   private logger: Logger;
   private fastPassFilter: FastPassFilter;
   private ragSystem: RAGSystem;
@@ -28,7 +27,6 @@ export class ModerationPipeline {
 
   constructor(db: DatabaseManager, ollama: OllamaManager, logger: Logger) {
     this.db = db;
-    this._ollama = ollama;
     this.logger = logger;
     this.fastPassFilter = new FastPassFilter(db, logger);
     this.ragSystem = new RAGSystem(db, ollama, logger);
@@ -120,9 +118,9 @@ export class ModerationPipeline {
           detectionType: 'fast_pass',
           ruleTriggered: result.ruleTriggered!,
           confidenceScores: { [result.ruleTriggered!]: result.confidence || 1.0 },
-          reasoning: result.reason,
+          reasoning: result.reason || undefined,
           success: actionResult.success,
-          error: actionResult.error
+          error: actionResult.error || undefined
         };
       }
 
@@ -201,7 +199,7 @@ export class ModerationPipeline {
           confidenceScores,
           reasoning: reasoning,
           success: actionResult.success,
-          error: actionResult.error
+          error: actionResult.error || undefined
         };
       }
 

@@ -3,18 +3,17 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
-import path from 'path';
-import { DatabaseManager } from './database/DatabaseManager.js';
-import { OllamaManager } from './ollama/OllamaManager.js';
-import { GreatshieldBot } from './core/GreatshieldBot.js';
-import { SetupWizard } from './cli/SetupWizard.js';
-import { Logger } from './utils/Logger.js';
+import { DatabaseManager } from './database/DatabaseManager';
+import { OllamaManager } from './ollama/OllamaManager';
+import { GreatshieldBot } from './core/GreatshieldBot';
+import { SetupWizard } from './cli/SetupWizard';
+import { Logger } from './utils/Logger';
 
 // Load environment variables
 dotenv.config();
 
 const program = new Command();
-const logger = Logger.create(process.env.NODE_ENV as any);
+const logger = Logger.create(process.env['NODE_ENV'] as any);
 
 // Global error handlers
 process.on('uncaughtException', (error) => {
@@ -72,17 +71,17 @@ program
         dotenv.config({ path: options.config });
       }
 
-      const token = process.env.DISCORD_TOKEN;
+      const token = process.env['DISCORD_TOKEN'];
       if (!token) {
         console.error(chalk.red('❌ Discord token not found. Please run "greatshield setup" first.'));
         process.exit(1);
       }
 
       // Initialize components
-      const db = new DatabaseManager(process.env.DATABASE_PATH);
+      const db = new DatabaseManager(process.env['DATABASE_PATH']);
       await db.initialize();
       
-      const ollama = new OllamaManager(process.env.OLLAMA_HOST);
+      const ollama = new OllamaManager(process.env['OLLAMA_HOST']);
       const bot = new GreatshieldBot(db, ollama, logger);
 
       // Setup graceful shutdown
@@ -121,10 +120,10 @@ program
     console.log(chalk.blue.bold('🛡️  Greatshield Health Check'));
     
     try {
-      const db = new DatabaseManager(process.env.DATABASE_PATH);
+      const db = new DatabaseManager(process.env['DATABASE_PATH']);
       await db.initialize();
       
-      const ollama = new OllamaManager(process.env.OLLAMA_HOST);
+      const ollama = new OllamaManager(process.env['OLLAMA_HOST']);
       
       console.log(chalk.yellow('\n📊 System Status:'));
       
@@ -140,7 +139,7 @@ program
       }
       
       // Check configuration
-      const guildId = process.env.DISCORD_GUILD_ID;
+      const guildId = process.env['DISCORD_GUILD_ID'];
       if (guildId) {
         const config = await db.getBotConfig(guildId);
         if (config) {
@@ -173,7 +172,7 @@ program
     console.log(chalk.blue.bold('🤖 Available Models'));
     
     try {
-      const ollama = new OllamaManager(process.env.OLLAMA_HOST);
+      const ollama = new OllamaManager(process.env['OLLAMA_HOST']);
       
       const health = await ollama.healthCheck();
       if (!health.isRunning) {
@@ -207,7 +206,7 @@ program
     console.log(chalk.blue.bold(`🤖 Downloading ${model}...`));
     
     try {
-      const ollama = new OllamaManager(process.env.OLLAMA_HOST);
+      const ollama = new OllamaManager(process.env['OLLAMA_HOST']);
       
       const health = await ollama.healthCheck();
       if (!health.isRunning) {
@@ -236,7 +235,7 @@ program
     
     try {
       const { exec, spawn } = await import('child_process');
-      const logFile = process.env.LOG_FILE || './logs/greatshield.log';
+      const logFile = process.env['LOG_FILE'] || './logs/greatshield.log';
       
       if (options.follow) {
         console.log(chalk.gray(`Following ${logFile}...`));

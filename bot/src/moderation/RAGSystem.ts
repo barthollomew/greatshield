@@ -1,6 +1,6 @@
-import { DatabaseManager, ModerationRule, BotConfig } from '../database/DatabaseManager.js';
-import { OllamaManager, GenerateRequest } from '../ollama/OllamaManager.js';
-import { Logger } from '../utils/Logger.js';
+import { DatabaseManager, ModerationRule, BotConfig } from '../database/DatabaseManager';
+import { OllamaManager, GenerateRequest } from '../ollama/OllamaManager';
+import { Logger } from '../utils/Logger';
 
 export interface RAGContext {
   recentMessages: Array<{user_id: string, content: string, timestamp: string}>;

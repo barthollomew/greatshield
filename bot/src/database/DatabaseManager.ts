@@ -30,10 +30,10 @@ export interface ModerationLog {
   username?: string;
   message_content: string;
   detection_type: 'fast_pass' | 'ai_analysis';
-  rule_triggered?: string;
+  rule_triggered?: string | undefined;
   confidence_scores?: string; // JSON string
   action_taken: string;
-  reasoning?: string;
+  reasoning?: string | undefined;
   moderator_id?: string;
   is_appeal?: boolean;
   appeal_reason?: string;
@@ -82,7 +82,15 @@ export class DatabaseManager {
   }
 
   private async createTables(): Promise<void> {
-    const schemaPath = path.join(__dirname, '../../schemas/database.sql');
+    // Handle both development and production paths
+    const schemaPath = fs.existsSync(path.join(__dirname, '../../schemas/database.sql'))
+      ? path.join(__dirname, '../../schemas/database.sql')
+      : path.join(process.cwd(), 'bot/schemas/database.sql');
+    
+    if (!fs.existsSync(schemaPath)) {
+      throw new Error(`Schema file not found at: ${schemaPath}`);
+    }
+    
     const schema = fs.readFileSync(schemaPath, 'utf8');
     
     try {
@@ -93,7 +101,15 @@ export class DatabaseManager {
   }
 
   private async seedDatabase(): Promise<void> {
-    const seedPath = path.join(__dirname, '../../schemas/seed-data.sql');
+    // Handle both development and production paths
+    const seedPath = fs.existsSync(path.join(__dirname, '../../schemas/seed-data.sql'))
+      ? path.join(__dirname, '../../schemas/seed-data.sql')
+      : path.join(process.cwd(), 'bot/schemas/seed-data.sql');
+    
+    if (!fs.existsSync(seedPath)) {
+      throw new Error(`Seed file not found at: ${seedPath}`);
+    }
+    
     const seedData = fs.readFileSync(seedPath, 'utf8');
     
     try {
@@ -112,8 +128,12 @@ export class DatabaseManager {
 
   // Policy Pack Methods
   async getPolicyPacks(): Promise<PolicyPack[]> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
-      const stmt = this.db!.prepare('SELECT * FROM policy_packs ORDER BY created_at DESC');
+      const stmt = this.db.prepare('SELECT * FROM policy_packs ORDER BY created_at DESC');
       return stmt.all() as PolicyPack[];
     } catch (error) {
       throw new Error(`Failed to get policy packs: ${error}`);
@@ -121,8 +141,12 @@ export class DatabaseManager {
   }
 
   async getActivePolicyPack(): Promise<PolicyPack | null> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
-      const stmt = this.db!.prepare('SELECT * FROM policy_packs WHERE is_active = 1 LIMIT 1');
+      const stmt = this.db.prepare('SELECT * FROM policy_packs WHERE is_active = 1 LIMIT 1');
       return (stmt.get() as PolicyPack) || null;
     } catch (error) {
       throw new Error(`Failed to get active policy pack: ${error}`);
@@ -238,7 +262,7 @@ export class DatabaseManager {
         VALUES (?, ?, ?, ?, ?)
       `);
 
-      stmt.run([channelId, messageId, userId, content, timestamp.toISOString()], (err) => {
+      stmt.run([channelId, messageId, userId, content, timestamp.toISOString()], (err: any) => {
         if (err) {
           reject(err);
           return;
@@ -246,16 +270,16 @@ export class DatabaseManager {
         resolve();
       });
 
-      stmt.finalize();
+      (stmt as any).finalize();
     });
   }
 
   async getRecentMessageContext(channelId: string, limit: number = 10): Promise<Array<{user_id: string, content: string, timestamp: string}>> {
     return new Promise((resolve, reject) => {
-      this.db!.all(
+      (this.db as any).all(
         'SELECT user_id, content, timestamp FROM message_context WHERE channel_id = ? ORDER BY timestamp DESC LIMIT ?',
         [channelId, limit],
-        (err, rows: Array<{user_id: string, content: string, timestamp: string}>) => {
+        (err: any, rows: Array<{user_id: string, content: string, timestamp: string}>) => {
           if (err) {
             reject(err);
             return;
@@ -269,10 +293,10 @@ export class DatabaseManager {
   // Banned Words Methods
   async getBannedWords(policyPackId: number): Promise<Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>> {
     return new Promise((resolve, reject) => {
-      this.db!.all(
+      (this.db as any).all(
         'SELECT word_or_phrase, is_regex, severity, action FROM banned_words WHERE policy_pack_id = ? AND enabled = 1',
         [policyPackId],
-        (err, rows: Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>) => {
+        (err: any, rows: Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>) => {
           if (err) {
             reject(err);
             return;

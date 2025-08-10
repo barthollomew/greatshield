@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { DatabaseManager, BotConfig } from '../database/DatabaseManager.js';
-import { OllamaManager } from '../ollama/OllamaManager.js';
+import { DatabaseManager, BotConfig } from '../database/DatabaseManager';
+import { OllamaManager } from '../ollama/OllamaManager';
 import fs from 'fs';
 import path from 'path';
 
@@ -191,7 +191,7 @@ export class SetupWizard {
       }
     ];
 
-    const _config = await inquirer.prompt(questions);
+    await inquirer.prompt(questions);
 
     // Create custom policy pack in database
     // This would need additional implementation in DatabaseManager

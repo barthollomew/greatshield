@@ -1,5 +1,5 @@
-import { DatabaseManager, BotConfig } from '../../database/DatabaseManager.js';
-import { Logger } from '../../utils/Logger.js';
+import { DatabaseManager, BotConfig } from '../../database/DatabaseManager';
+import { Logger } from '../../utils/Logger';
 
 export interface FastPassResult {
   triggered: boolean;
@@ -54,7 +54,7 @@ export class FastPassFilter {
     }
 
     // Check spam patterns
-    const spamCheck = await this.checkSpamPatterns(content, userId, channelId);
+    const spamCheck = await this.checkSpamPatterns(content, _userId, _channelId);
     if (spamCheck.triggered) {
       return spamCheck;
     }
@@ -138,7 +138,7 @@ export class FastPassFilter {
     return { triggered: false };
   }
 
-  private async checkSpamPatterns(content: string, userId: string, channelId: string): Promise<FastPassResult> {
+  private async checkSpamPatterns(content: string, _userId: string, _channelId: string): Promise<FastPassResult> {
     // Check for excessive caps
     const capsRatio = this.getCapsRatio(content);
     if (content.length > 20 && capsRatio > 0.7) {

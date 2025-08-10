@@ -2,11 +2,9 @@ import {
   Message, 
   TextChannel, 
   EmbedBuilder, 
-  PermissionFlagsBits,
-  User,
-  GuildMember 
+  PermissionFlagsBits
 } from 'discord.js';
-import { Logger } from '../../utils/Logger.js';
+import { Logger } from '../../utils/Logger';
 
 export interface ActionResult {
   success: boolean;
@@ -87,10 +85,12 @@ export class ModerationActions {
         .setTimestamp()
         .setFooter({ 
           text: 'This message was automatically moderated by Greatshield',
-          iconURL: message.client.user?.avatarURL() ?? undefined
+          ...(message.client.user?.avatarURL() && { iconURL: message.client.user.avatarURL()! })
         });
 
-      await message.channel.send({ embeds: [embed] });
+      if (message.channel.isTextBased() && 'send' in message.channel) {
+        await message.channel.send({ embeds: [embed] });
+      }
 
       return {
         success: true,
@@ -135,10 +135,12 @@ export class ModerationActions {
         .setTimestamp()
         .setFooter({ 
           text: 'This action was taken automatically by Greatshield',
-          iconURL: message.client.user?.avatarURL() ?? undefined
+          ...(message.client.user?.avatarURL() && { iconURL: message.client.user.avatarURL()! })
         });
 
-      await channel.send({ embeds: [warningEmbed] });
+      if (channel.isTextBased() && 'send' in channel) {
+        await channel.send({ embeds: [warningEmbed] });
+      }
 
       // Try to send a DM to the user
       try {
@@ -231,7 +233,7 @@ export class ModerationActions {
       await member.roles.add(shadowbanRole);
 
       // Log the action
-      const _logEmbed = new EmbedBuilder()
+      new EmbedBuilder()
         .setTitle('👻 User Shadowbanned')
         .setDescription(`<@${message.author.id}> has been automatically shadowbanned.`)
         .addFields([
@@ -250,7 +252,7 @@ export class ModerationActions {
         .setTimestamp()
         .setFooter({ 
           text: 'Automatic action by Greatshield',
-          iconURL: message.client.user?.avatarURL() ?? undefined
+          ...(message.client.user?.avatarURL() && { iconURL: message.client.user.avatarURL()! })
         });
 
       // Find mod log channel and send notification

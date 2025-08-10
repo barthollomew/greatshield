@@ -2,10 +2,9 @@ import {
   SlashCommandBuilder, 
   CommandInteraction, 
   EmbedBuilder,
-  PermissionFlagsBits,
-  ChatInputCommandInteraction 
+  PermissionFlagsBits
 } from 'discord.js';
-import { BotCommand, GreatshieldBot } from '../GreatshieldBot.js';
+import { BotCommand, GreatshieldBot } from '../GreatshieldBot';
 
 export const GuardianCommand: BotCommand = {
   data: new SlashCommandBuilder()
@@ -168,7 +167,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
     const [, _guildId, channelId, messageId] = match;
 
     // Check if the message was actually moderated
-    const moderationLog = await bot.db.getModerationLogByMessageId(messageId);
+    const moderationLog = await bot.db.getModerationLogByMessageId(messageId!);
 
     if (!moderationLog) {
       await interaction.editReply({ 
@@ -241,7 +240,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
     if (config?.mod_log_channel_id) {
       try {
         const logChannel = await bot.client.channels.fetch(config.mod_log_channel_id);
-        if (logChannel && logChannel.isTextBased()) {
+        if (logChannel && logChannel.isTextBased() && 'send' in logChannel) {
           await logChannel.send({ embeds: [embed] });
         }
       } catch (error) {

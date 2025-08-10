@@ -9,10 +9,10 @@ import {
   EmbedBuilder,
   PartialMessage
 } from 'discord.js';
-import { DatabaseManager, BotConfig, ModerationLog } from '../database/DatabaseManager.js';
-import { OllamaManager } from '../ollama/OllamaManager.js';
-import { ModerationPipeline } from '../moderation/ModerationPipeline.js';
-import { Logger } from '../utils/Logger.js';
+import { DatabaseManager, BotConfig, ModerationLog } from '../database/DatabaseManager';
+import { OllamaManager } from '../ollama/OllamaManager';
+import { ModerationPipeline } from '../moderation/ModerationPipeline';
+import { Logger } from '../utils/Logger';
 import chalk from 'chalk';
 
 export interface BotCommand {
@@ -116,10 +116,10 @@ export class GreatshieldBot {
           username: message.author.username,
           message_content: message.content,
           detection_type: result.detectionType,
-          rule_triggered: result.ruleTriggered,
+          rule_triggered: result.ruleTriggered || undefined,
           confidence_scores: JSON.stringify(result.confidenceScores),
           action_taken: result.actionTaken,
-          reasoning: result.reasoning
+          reasoning: result.reasoning || undefined
         };
 
         await this.db.addModerationLog(log);
@@ -143,7 +143,7 @@ export class GreatshieldBot {
     }
   }
 
-  private async onMessageUpdate(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {
+  private async onMessageUpdate(_oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {
     // Treat message edits as new messages for moderation
     if (newMessage.partial) {
       try {
@@ -194,7 +194,7 @@ export class GreatshieldBot {
     console.warn(chalk.yellow('Discord Warning:'), warning);
   }
 
-  private async sendModerationLog(log: ModerationLog, originalMessage: Message): Promise<void> {
+  private async sendModerationLog(log: ModerationLog, _originalMessage: Message): Promise<void> {
     if (!this.config?.mod_log_channel_id) return;
 
     try {

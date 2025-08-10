@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node bot/src/index.ts",
-    "start": "node dist/index.js",
+    "start": "node dist/src/index.js",
     "clean": "rimraf dist",
     "lint": "eslint bot/src --ext .ts",
     "lint:fix": "eslint bot/src --ext .ts --fix",
@@ -17,7 +17,9 @@
     "package:win": "pkg . --targets node20-win-x64 --output dist/greatshield-win.exe",
     "package:mac": "pkg . --targets node20-macos-x64 --output dist/greatshield-mac",
     "package:linux": "pkg . --targets node20-linux-x64 --output dist/greatshield-linux",
-    "package:all": "npm run package:win && npm run package:mac && npm run package:linux"
+    "package:all": "npm run package:win && npm run package:mac && npm run package:linux",
+    "dev:landing": "cd website && npm run dev",
+    "build:landing": "cd website && npm run build"
   },
   "keywords": [
     "discord",
