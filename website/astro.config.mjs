@@ -6,7 +6,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://greatshield-project.github.io',
-  base: '/',
+  site: 'https://barthollomew.github.io',
+  base: '/greatshield',
   integrations: [react(), tailwind()]
 });
