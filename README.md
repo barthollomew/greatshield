@@ -53,12 +53,12 @@ npx greatshield
 ```
 
 #### Option 2: Download Binary
-1. Download the latest release for your platform from [Releases](https://github.com/your-repo/greatshield/releases)
+1. Download the latest release for your platform from [Releases](https://github.com/barthollomew/greatshield/releases)
 2. Extract and run the executable
 
 #### Option 3: Build from Source
 ```bash
-git clone https://github.com/your-repo/greatshield.git
+git clone https://github.com/barthollomew/greatshield.git
 cd greatshield
 npm install
 npm run build
@@ -291,7 +291,7 @@ ollama serve
 
 ### Setup
 ```bash
-git clone https://github.com/your-repo/greatshield.git
+git clone https://github.com/barthollomew/greatshield.git
 cd greatshield
 npm install
 npm run dev  # Development mode with hot reload
