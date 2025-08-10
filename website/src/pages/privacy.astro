@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeaderNav from '../components/HeaderNav.astro';
+import Footer from '../components/Footer.astro';
+import Card from '../components/Card';
+---
+
+<Layout title="Privacy Policy - Greatshield">
+  <HeaderNav />
+  
+  <main>
+    <section class="container mx-auto px-4 py-16">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+          Privacy Policy
+        </h1>
+        <p class="text-center text-foreground/70 mb-12">
+          Last updated: January 2025
+        </p>
+
+        <div class="space-y-8">
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Data Processing
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              Greatshield is designed with privacy as a fundamental principle. 
+              All message analysis and moderation decisions occur entirely on your local machine.
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• No message content is transmitted to external servers</li>
+              <li>• No user data is shared with third parties</li>
+              <li>• No cloud-based AI services are utilized</li>
+              <li>• All processing happens within your network infrastructure</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Local Data Storage
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              Greatshield stores data locally in SQLite databases on your system:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Moderation logs and audit trails</li>
+              <li>• Policy configurations and rules</li>
+              <li>• Bot configuration and settings</li>
+              <li>• Message context for RAG analysis (configurable retention)</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Discord Integration
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              Greatshield operates as a Discord bot and requires certain permissions:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Read message history (for context analysis)</li>
+              <li>• Send messages (for warnings and notifications)</li>
+              <li>• Manage messages (for deletion and editing)</li>
+              <li>• Manage roles (for shadowban functionality)</li>
+            </ul>
+            <p class="text-sm text-foreground/70 mt-4">
+              These permissions are used solely for moderation purposes as configured by server administrators.
+            </p>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              External Dependencies
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              Greatshield relies on the following external services:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Discord API (for bot functionality)</li>
+              <li>• Ollama (local AI model hosting)</li>
+              <li>• npm registry (for installation and updates)</li>
+            </ul>
+            <p class="text-sm text-foreground/70 mt-4">
+              No personal data is transmitted to these services beyond what is necessary for technical operation.
+            </p>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Data Retention
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              You have complete control over data retention:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Configure message context retention periods</li>
+              <li>• Export or delete moderation logs at any time</li>
+              <li>• Remove the entire database to purge all local data</li>
+              <li>• No data persists beyond your local installation</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Contact Information
+            </h2>
+            <p class="text-foreground/80">
+              For privacy-related questions or concerns about Greatshield, 
+              please contact us through our GitHub repository or community channels. 
+              As an open-source project, our code and data practices are fully transparent and auditable.
+            </p>
+          </Card>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

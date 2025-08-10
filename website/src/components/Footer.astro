@@ -1,0 +1,45 @@
+---
+// Get version and commit hash - fallback to static values
+const version = "v1.0.0";
+const commitHash = "abc1234";
+---
+
+<footer class="border-t border-border mt-16">
+  <div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-foreground/70">
+      <div class="flex items-center gap-8">
+        <span>© 2025 Greatshield</span>
+        <a href="/privacy" class="hover:text-accent transition-colors">Privacy</a>
+        <a href="/terms" class="hover:text-accent transition-colors">Terms</a>
+      </div>
+      
+      <div class="text-center">
+        {version} • {commitHash}
+      </div>
+      
+      <a 
+        href="https://github.com/greatshield/greatshield" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="hover:text-accent transition-colors"
+      >
+        GitHub
+      </a>
+    </div>
+    
+    <!-- Pixel fireplace -->
+    <div class="flex justify-center mt-8">
+      <div class="card rounded-sm p-4 text-center">
+        <img 
+          src="/pixel-fireplace.gif" 
+          alt="Animated pixel fireplace" 
+          class="w-16 h-12 mx-auto mb-2 pixelated"
+          style="image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges;"
+        />
+        <div class="text-xs text-foreground/50 uppercase tracking-wide">
+          Bonfire Kindled
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

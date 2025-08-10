@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeaderNav from '../components/HeaderNav.astro';
+import Footer from '../components/Footer.astro';
+import Card from '../components/Card';
+---
+
+<Layout title="Terms of Service - Greatshield">
+  <HeaderNav />
+  
+  <main>
+    <section class="container mx-auto px-4 py-16">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+          Terms of Service
+        </h1>
+        <p class="text-center text-foreground/70 mb-12">
+          Last updated: January 2025
+        </p>
+
+        <div class="space-y-8">
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Software License
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              Greatshield is distributed under the MIT License as open-source software. 
+              You are free to use, modify, and distribute the software in accordance with the license terms.
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Commercial and non-commercial use permitted</li>
+              <li>• Source code modifications allowed</li>
+              <li>• Redistribution permitted with attribution</li>
+              <li>• No warranty or guarantee provided</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Acceptable Use
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              By using Greatshield, you agree to:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Comply with Discord's Terms of Service and Community Guidelines</li>
+              <li>• Use the software responsibly and ethically</li>
+              <li>• Not circumvent or abuse the moderation systems</li>
+              <li>• Respect the privacy and rights of Discord users</li>
+              <li>• Configure appropriate policies for your community</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Disclaimer of Warranties
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              Greatshield is provided "as is" without any warranties:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• No guarantee of accuracy in moderation decisions</li>
+              <li>• AI models may produce false positives or negatives</li>
+              <li>• Software may contain bugs or security vulnerabilities</li>
+              <li>• Compatibility with future Discord API changes not guaranteed</li>
+              <li>• Performance may vary based on hardware and configuration</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Limitation of Liability
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              The Greatshield maintainers and contributors shall not be liable for:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Damages resulting from software use or misuse</li>
+              <li>• Loss of data or server disruption</li>
+              <li>• Incorrect moderation decisions or actions</li>
+              <li>• Third-party service failures or outages</li>
+              <li>• Security breaches or privacy violations</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              User Responsibilities
+            </h2>
+            <p class="text-foreground/80 mb-4">
+              As a Greatshield administrator, you are responsible for:
+            </p>
+            <ul class="space-y-2 text-sm text-foreground/80">
+              <li>• Properly configuring policies and thresholds</li>
+              <li>• Monitoring and reviewing moderation actions</li>
+              <li>• Maintaining appropriate Discord bot permissions</li>
+              <li>• Securing your system and bot credentials</li>
+              <li>• Complying with applicable laws and regulations</li>
+            </ul>
+          </Card>
+
+          <Card client:load>
+            <h2 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Modifications
+            </h2>
+            <p class="text-foreground/80">
+              These terms may be updated periodically. Continued use of Greatshield 
+              constitutes acceptance of any modifications. Users are encouraged to 
+              review the terms regularly and stay informed of changes through our 
+              official communication channels.
+            </p>
+          </Card>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

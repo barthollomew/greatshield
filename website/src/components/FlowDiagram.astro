@@ -1,0 +1,58 @@
+---
+// Simple flow diagram component
+---
+
+<div class="flow-diagram flex items-center justify-center gap-4 py-8">
+  <div class="card rounded-sm p-3 text-center min-w-[120px]">
+    <div class="text-xs uppercase tracking-wide text-accent mb-1">User Message</div>
+    <div class="text-foreground/70 text-xs">Discord Gateway</div>
+  </div>
+  
+  <svg class="text-accent" width="24" height="16" viewBox="0 0 24 16" fill="currentColor">
+    <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z" transform="rotate(-90 12 8)"/>
+  </svg>
+  
+  <div class="card rounded-sm p-3 text-center min-w-[120px]">
+    <div class="text-xs uppercase tracking-wide text-accent mb-1">Fast-Pass</div>
+    <div class="text-foreground/70 text-xs">Regex & Rules</div>
+  </div>
+  
+  <svg class="text-accent" width="24" height="16" viewBox="0 0 24 16" fill="currentColor">
+    <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z" transform="rotate(-90 12 8)"/>
+  </svg>
+  
+  <div class="card rounded-sm p-3 text-center min-w-[120px]">
+    <div class="text-xs uppercase tracking-wide text-accent mb-1">RAG Retrieval</div>
+    <div class="text-foreground/70 text-xs">Policy Context</div>
+  </div>
+  
+  <svg class="text-accent" width="24" height="16" viewBox="0 0 24 16" fill="currentColor">
+    <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z" transform="rotate(-90 12 8)"/>
+  </svg>
+  
+  <div class="card rounded-sm p-3 text-center min-w-[120px]">
+    <div class="text-xs uppercase tracking-wide text-accent mb-1">Local LLM</div>
+    <div class="text-foreground/70 text-xs">AI Analysis</div>
+  </div>
+  
+  <svg class="text-accent" width="24" height="16" viewBox="0 0 24 16" fill="currentColor">
+    <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z" transform="rotate(-90 12 8)"/>
+  </svg>
+  
+  <div class="card rounded-sm p-3 text-center min-w-[120px]">
+    <div class="text-xs uppercase tracking-wide text-accent mb-1">Action & Log</div>
+    <div class="text-foreground/70 text-xs">Moderation</div>
+  </div>
+</div>
+
+<style>
+  @media (max-width: 768px) {
+    .flow-diagram {
+      flex-direction: column;
+    }
+    
+    .flow-diagram svg {
+      transform: rotate(0deg);
+    }
+  }
+</style>

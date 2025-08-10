@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeaderNav from '../components/HeaderNav.astro';
+import Footer from '../components/Footer.astro';
+import Card from '../components/Card';
+import CodeBlock from '../components/CodeBlock';
+---
+
+<Layout title="Greatshield - AI-Powered Discord Moderation">
+  <HeaderNav />
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 py-16 text-center">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-wide">
+          AI-Powered Discord Moderation. Locally.
+        </h1>
+        <p class="text-lg md:text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
+          Greatshield protects your server with AI while keeping every byte on your machine.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/download" class="btn-primary rounded-sm px-8 py-3">
+            Download & Run Locally
+          </a>
+          <a href="/how-it-works" class="btn-secondary rounded-sm px-8 py-3">
+            How It Works
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diagram Section -->
+    <section class="container mx-auto px-4 py-16">
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <!-- Left: Your Message -->
+        <Card client:load>
+          <div class="text-center mb-4">
+            <h3 class="text-lg font-semibold uppercase tracking-wide text-accent">
+              1. Your Message
+            </h3>
+          </div>
+          <div class="border border-border rounded-sm p-3 bg-background/30 font-mono text-sm">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-accent rounded-full flex-shrink-0"></div>
+              <div>
+                <div class="text-accent text-xs mb-1">user#1234</div>
+                <div class="text-foreground">
+                  This is a sample Discord message that might contain problematic content.
+                </div>
+                <div class="text-foreground/50 text-xs mt-1">Today at 2:30 PM</div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <!-- Right: Greatshield's Decision -->
+        <Card client:load>
+          <div class="text-center mb-4">
+            <h3 class="text-lg font-semibold uppercase tracking-wide text-accent">
+              2. Greatshield's Decision
+            </h3>
+          </div>
+          <CodeBlock client:load copyable={false}>
+{`{
+  "toxicity": 0.85,
+  "harassment": 0.12,
+  "spam": 0.03,
+  "grooming": 0.01,
+  "action": "delete_warn",
+  "reasoning": "High toxicity detected with offensive language patterns"
+}`}
+          </CodeBlock>
+        </Card>
+      </div>
+
+      <!-- Arrow between cards on desktop -->
+      <div class="hidden md:flex justify-center -mt-32 mb-16">
+        <svg class="text-accent" width="48" height="32" viewBox="0 0 48 32" fill="currentColor">
+          <path d="M32 16l-8-8v6H8v4h16v6l8-8z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="container mx-auto px-4 py-8">
+      <div class="flex flex-wrap justify-center gap-6">
+        <div class="card rounded-sm px-6 py-3 text-center">
+          <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+            Local Inference
+          </div>
+        </div>
+        <div class="card rounded-sm px-6 py-3 text-center">
+          <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+            No Hosting
+          </div>
+        </div>
+        <div class="card rounded-sm px-6 py-3 text-center">
+          <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+            Policy Packs
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container mx-auto px-4 py-16">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl md:text-3xl font-bold text-center mb-12 tracking-wide">
+          Privacy-First Moderation
+        </h2>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <Card client:load>
+            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              100% Local Processing
+            </h3>
+            <p class="text-foreground/80 text-sm">
+              All AI analysis happens on your machine. No external API calls, 
+              no data leaving your network, complete privacy control.
+            </p>
+          </Card>
+
+          <Card client:load>
+            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              Two-Pass Moderation
+            </h3>
+            <p class="text-foreground/80 text-sm">
+              Fast regex filtering catches obvious violations instantly, 
+              while local AI provides nuanced analysis for edge cases.
+            </p>
+          </Card>
+
+          <Card client:load>
+            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              Configurable Policies
+            </h3>
+            <p class="text-foreground/80 text-sm">
+              Choose from Strict, Balanced, or Lenient policy packs. 
+              Customize thresholds and actions to fit your community.
+            </p>
+          </Card>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

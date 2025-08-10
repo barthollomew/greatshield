@@ -1,0 +1,48 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b border-border">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <!-- Globe-like glyph -->
+      <svg class="glyph" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="8" cy="8" r="6" stroke="currentColor" fill="none" stroke-width="1"/>
+        <path d="M2 8h12M8 2a6 6 0 0 0 0 12M8 2a6 6 0 0 1 0 12" stroke="currentColor" fill="none" stroke-width="1"/>
+      </svg>
+      <a href="/" class="text-lg font-semibold tracking-wide hover:text-accent transition-colors">
+        GREATSHIELD
+      </a>
+    </div>
+    
+    <nav class="hidden md:flex items-center gap-6 text-sm">
+      <a 
+        href="/how-it-works" 
+        class={`hover:text-accent transition-colors ${currentPath === '/how-it-works' ? 'text-accent' : ''}`}
+      >
+        How It Works
+      </a>
+      <a 
+        href="/models" 
+        class={`hover:text-accent transition-colors ${currentPath === '/models' ? 'text-accent' : ''}`}
+      >
+        Models
+      </a>
+      <a 
+        href="/download" 
+        class={`hover:text-accent transition-colors ${currentPath === '/download' ? 'text-accent' : ''}`}
+      >
+        Download
+      </a>
+    </nav>
+    
+    <a 
+      href="https://github.com/greatshield/greatshield" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="btn-secondary rounded-sm text-xs"
+    >
+      GitHub
+    </a>
+  </div>
+</header>
