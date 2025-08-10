@@ -5,8 +5,10 @@ import { Logger } from '../utils/Logger';
 import { FastPassFilter } from './filters/FastPassFilter';
 import { RAGSystem } from './RAGSystem';
 import { ModerationActions, ActionResult } from './actions/ModerationActions';
+import { IModerationPipeline, ModerationResult } from '../core/interfaces/IModerationPipeline';
 
-export interface ModerationResult {
+// Internal result interface for backward compatibility
+interface InternalModerationResult {
   actionTaken: string;
   detectionType: 'fast_pass' | 'ai_analysis';
   ruleTriggered?: string | undefined;
@@ -16,7 +18,7 @@ export interface ModerationResult {
   error?: string | undefined;
 }
 
-export class ModerationPipeline {
+export class ModerationPipeline implements IModerationPipeline {
   private db: DatabaseManager;
   private logger: Logger;
   private fastPassFilter: FastPassFilter;
@@ -57,29 +59,29 @@ export class ModerationPipeline {
     }
   }
 
-  async moderateMessage(message: Message): Promise<ModerationResult> {
+  async moderateMessage(message: Message): Promise<ModerationResult | null> {
     if (!this.isInitialized || !this.config) {
-      return {
-        actionTaken: 'none',
-        detectionType: 'fast_pass',
-        confidenceScores: {},
-        success: false,
-        error: 'Moderation pipeline not initialized'
-      };
+      this.logger.error('Moderation pipeline not initialized');
+      return null;
     }
 
     try {
       // Phase 1: Fast Pass Filter
       const fastPassResult = await this.runFastPass(message);
       
-      if (fastPassResult.actionTaken !== 'none') {
-        return fastPassResult;
+      if (fastPassResult.actionTaken !== 'none' && fastPassResult.success) {
+        return this.convertToInterfaceResult(fastPassResult);
       }
 
       // Phase 2: AI Analysis (if fast pass didn't trigger)
       const aiResult = await this.runAIAnalysis(message);
       
-      return aiResult;
+      if (aiResult.actionTaken !== 'none' && aiResult.success) {
+        return this.convertToInterfaceResult(aiResult);
+      }
+
+      // No action needed
+      return null;
 
     } catch (error) {
       this.logger.error('Error in moderation pipeline', {
@@ -87,17 +89,11 @@ export class ModerationPipeline {
         error: String(error)
       });
 
-      return {
-        actionTaken: 'none',
-        detectionType: 'fast_pass',
-        confidenceScores: {},
-        success: false,
-        error: String(error)
-      };
+      return null;
     }
   }
 
-  private async runFastPass(message: Message): Promise<ModerationResult> {
+  private async runFastPass(message: Message): Promise<InternalModerationResult> {
     try {
       const result = await this.fastPassFilter.checkMessage(
         message.content,
@@ -147,7 +143,7 @@ export class ModerationPipeline {
     }
   }
 
-  private async runAIAnalysis(message: Message): Promise<ModerationResult> {
+  private async runAIAnalysis(message: Message): Promise<InternalModerationResult> {
     if (!this.config?.active_policy_pack_id) {
       return {
         actionTaken: 'none',
@@ -283,6 +279,16 @@ export class ModerationPipeline {
         error: String(error)
       };
     }
+  }
+
+  private convertToInterfaceResult(internal: InternalModerationResult): ModerationResult {
+    return {
+      action: internal.actionTaken,
+      reason: internal.reasoning || 'No reason provided',
+      confidence: internal.confidenceScores['overall'],
+      ruleTriggered: internal.ruleTriggered,
+      detectionType: internal.detectionType
+    };
   }
 
   // Method to reload configuration and reinitialize components

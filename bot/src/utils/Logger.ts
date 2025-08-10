@@ -1,12 +1,9 @@
 import winston from 'winston';
 import path from 'path';
 import fs from 'fs';
+import { ILogger, LogContext } from '../core/interfaces/ILogger';
 
-export interface LogContext {
-  [key: string]: any;
-}
-
-export class Logger {
+export class Logger implements ILogger {
   private winston: winston.Logger;
 
   constructor(logLevel: string = 'info', logFile?: string) {
@@ -139,7 +136,7 @@ export class Logger {
   }
 
   // Method to create a child logger with persistent context
-  child(context: LogContext): Logger {
+  child(context: LogContext): ILogger {
     const childLogger = new Logger();
     childLogger.winston = this.winston.child(context);
     return childLogger;

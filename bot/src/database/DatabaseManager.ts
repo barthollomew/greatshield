@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
+import { IDatabaseManager } from '../core/interfaces/IDatabaseManager';
 
 export interface PolicyPack {
   id: number;
@@ -56,7 +57,7 @@ export interface BotConfig {
   updated_at?: string;
 }
 
-export class DatabaseManager {
+export class DatabaseManager implements IDatabaseManager {
   private db: Database.Database | null = null;
   private dbPath: string;
 
@@ -154,8 +155,12 @@ export class DatabaseManager {
   }
 
   async setActivePolicyPack(policyPackId: number): Promise<void> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
-      const transaction = this.db!.transaction(() => {
+      const transaction = this.db.transaction(() => {
         this.db!.prepare('UPDATE policy_packs SET is_active = 0').run();
         this.db!.prepare('UPDATE policy_packs SET is_active = 1 WHERE id = ?').run(policyPackId);
       });
@@ -167,8 +172,12 @@ export class DatabaseManager {
 
   // Moderation Rules Methods
   async getModerationRules(policyPackId: number): Promise<ModerationRule[]> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
-      const stmt = this.db!.prepare('SELECT * FROM moderation_rules WHERE policy_pack_id = ? AND enabled = 1');
+      const stmt = this.db.prepare('SELECT * FROM moderation_rules WHERE policy_pack_id = ? AND enabled = 1');
       return stmt.all(policyPackId) as ModerationRule[];
     } catch (error) {
       throw new Error(`Failed to get moderation rules: ${error}`);
@@ -177,6 +186,10 @@ export class DatabaseManager {
 
   // Moderation Logs Methods
   async addModerationLog(log: ModerationLog): Promise<number> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
       const stmt = this.db!.prepare(`
         INSERT INTO moderation_logs (
@@ -211,8 +224,12 @@ export class DatabaseManager {
   }
 
   async getModerationLogByMessageId(messageId: string): Promise<ModerationLog | null> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
-      const stmt = this.db!.prepare('SELECT * FROM moderation_logs WHERE message_id = ? LIMIT 1');
+      const stmt = this.db.prepare('SELECT * FROM moderation_logs WHERE message_id = ? LIMIT 1');
       return (stmt.get(messageId) as ModerationLog) || null;
     } catch (error) {
       throw new Error(`Failed to get moderation log: ${error}`);
@@ -221,8 +238,12 @@ export class DatabaseManager {
 
   // Bot Configuration Methods
   async getBotConfig(guildId: string): Promise<BotConfig | null> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
-      const stmt = this.db!.prepare('SELECT * FROM bot_config WHERE guild_id = ? LIMIT 1');
+      const stmt = this.db.prepare('SELECT * FROM bot_config WHERE guild_id = ? LIMIT 1');
       return (stmt.get(guildId) as BotConfig) || null;
     } catch (error) {
       throw new Error(`Failed to get bot config: ${error}`);
@@ -230,6 +251,10 @@ export class DatabaseManager {
   }
 
   async updateBotConfig(config: BotConfig): Promise<void> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
       const stmt = this.db!.prepare(`
         INSERT OR REPLACE INTO bot_config (
@@ -256,61 +281,57 @@ export class DatabaseManager {
 
   // Message Context Methods (for RAG)
   async addMessageContext(channelId: string, messageId: string, userId: string, content: string, timestamp: Date): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const stmt = this.db!.prepare(`
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
+    try {
+      const stmt = this.db.prepare(`
         INSERT OR IGNORE INTO message_context (channel_id, message_id, user_id, content, timestamp)
         VALUES (?, ?, ?, ?, ?)
       `);
-
-      stmt.run([channelId, messageId, userId, content, timestamp.toISOString()], (err: any) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve();
-      });
-
-      (stmt as any).finalize();
-    });
+      
+      stmt.run(channelId, messageId, userId, content, timestamp.toISOString());
+    } catch (error) {
+      throw new Error(`Failed to add message context: ${error}`);
+    }
   }
 
   async getRecentMessageContext(channelId: string, limit: number = 10): Promise<Array<{user_id: string, content: string, timestamp: string}>> {
-    return new Promise((resolve, reject) => {
-      (this.db as any).all(
-        'SELECT user_id, content, timestamp FROM message_context WHERE channel_id = ? ORDER BY timestamp DESC LIMIT ?',
-        [channelId, limit],
-        (err: any, rows: Array<{user_id: string, content: string, timestamp: string}>) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve(rows);
-        }
-      );
-    });
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
+    try {
+      const stmt = this.db.prepare('SELECT user_id, content, timestamp FROM message_context WHERE channel_id = ? ORDER BY timestamp DESC LIMIT ?');
+      return stmt.all(channelId, limit) as Array<{user_id: string, content: string, timestamp: string}>;
+    } catch (error) {
+      throw new Error(`Failed to get recent message context: ${error}`);
+    }
   }
 
   // Banned Words Methods
   async getBannedWords(policyPackId: number): Promise<Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>> {
-    return new Promise((resolve, reject) => {
-      (this.db as any).all(
-        'SELECT word_or_phrase, is_regex, severity, action FROM banned_words WHERE policy_pack_id = ? AND enabled = 1',
-        [policyPackId],
-        (err: any, rows: Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve(rows);
-        }
-      );
-    });
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
+    try {
+      const stmt = this.db.prepare('SELECT word_or_phrase, is_regex, severity, action FROM banned_words WHERE policy_pack_id = ? AND enabled = 1');
+      return stmt.all(policyPackId) as Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>;
+    } catch (error) {
+      throw new Error(`Failed to get banned words: ${error}`);
+    }
   }
 
   // Blocked URLs Methods
   async getBlockedUrls(policyPackId: number): Promise<Array<{url_pattern: string, is_regex: boolean, reason: string, action: string}>> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
     try {
-      const stmt = this.db!.prepare('SELECT url_pattern, is_regex, reason, action FROM blocked_urls WHERE policy_pack_id = ? AND enabled = 1');
+      const stmt = this.db.prepare('SELECT url_pattern, is_regex, reason, action FROM blocked_urls WHERE policy_pack_id = ? AND enabled = 1');
       return stmt.all(policyPackId) as Array<{url_pattern: string, is_regex: boolean, reason: string, action: string}>;
     } catch (error) {
       throw new Error(`Failed to get blocked URLs: ${error}`);

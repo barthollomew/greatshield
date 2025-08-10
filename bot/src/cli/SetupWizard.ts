@@ -372,6 +372,9 @@ PORT=3000
   }
 
   static async runIfNeeded(db: DatabaseManager, ollama: OllamaManager): Promise<WizardConfig | null> {
+    // Initialize database first
+    await db.initialize();
+    
     // Check if configuration exists
     const envPath = path.resolve('.env');
     const envExists = fs.existsSync(envPath);
