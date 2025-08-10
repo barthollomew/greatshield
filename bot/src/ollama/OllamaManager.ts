@@ -84,8 +84,8 @@ export class OllamaManager {
     switch (platform) {
       case 'win32':
         return [
-          path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Ollama', 'ollama.exe'),
-          path.join(process.env.PROGRAMFILES || '', 'Ollama', 'ollama.exe'),
+          path.join(process.env['LOCALAPPDATA'] || '', 'Programs', 'Ollama', 'ollama.exe'),
+          path.join(process.env['PROGRAMFILES'] || '', 'Ollama', 'ollama.exe'),
           'C:\\Program Files\\Ollama\\ollama.exe',
           'C:\\Users\\' + os.userInfo().username + '\\AppData\\Local\\Programs\\Ollama\\ollama.exe'
         ];
@@ -163,7 +163,7 @@ export class OllamaManager {
       const writer = fs.createWriteStream(tempPath);
       response.data.pipe(writer);
       
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         writer.on('finish', resolve);
         writer.on('error', reject);
       });
@@ -200,7 +200,7 @@ export class OllamaManager {
       const writer = fs.createWriteStream(tempPath);
       response.data.pipe(writer);
       
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         writer.on('finish', resolve);
         writer.on('error', reject);
       });

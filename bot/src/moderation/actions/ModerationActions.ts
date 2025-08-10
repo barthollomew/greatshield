@@ -87,7 +87,7 @@ export class ModerationActions {
         .setTimestamp()
         .setFooter({ 
           text: 'This message was automatically moderated by Greatshield',
-          iconURL: message.client.user?.avatarURL() || undefined
+          iconURL: message.client.user?.avatarURL() ?? undefined
         });
 
       await message.channel.send({ embeds: [embed] });
@@ -135,7 +135,7 @@ export class ModerationActions {
         .setTimestamp()
         .setFooter({ 
           text: 'This action was taken automatically by Greatshield',
-          iconURL: message.client.user?.avatarURL() || undefined
+          iconURL: message.client.user?.avatarURL() ?? undefined
         });
 
       await channel.send({ embeds: [warningEmbed] });
@@ -216,8 +216,8 @@ export class ModerationActions {
 
         // Configure role permissions for all channels
         for (const channel of guild.channels.cache.values()) {
-          if (channel.isTextBased()) {
-            await channel.permissionOverwrites.create(shadowbanRole, {
+          if (channel.isTextBased() && 'permissionOverwrites' in channel) {
+            await (channel as any).permissionOverwrites.create(shadowbanRole, {
               SendMessages: false,
               AddReactions: false,
               Speak: false,
@@ -231,7 +231,7 @@ export class ModerationActions {
       await member.roles.add(shadowbanRole);
 
       // Log the action
-      const logEmbed = new EmbedBuilder()
+      const _logEmbed = new EmbedBuilder()
         .setTitle('👻 User Shadowbanned')
         .setDescription(`<@${message.author.id}> has been automatically shadowbanned.`)
         .addFields([
@@ -250,7 +250,7 @@ export class ModerationActions {
         .setTimestamp()
         .setFooter({ 
           text: 'Automatic action by Greatshield',
-          iconURL: message.client.user?.avatarURL() || undefined
+          iconURL: message.client.user?.avatarURL() ?? undefined
         });
 
       // Find mod log channel and send notification
@@ -348,17 +348,22 @@ export class ModerationActions {
 
       // This would typically be sent to a dedicated mod channel
       // For now, we'll send to the same channel with ephemeral-like behavior
-      const escalationMessage = await message.channel.send({
-        content: mentionText,
-        embeds: [alertEmbed]
-      });
-
-      // Auto-delete the escalation message after 10 minutes to reduce clutter
-      setTimeout(() => {
-        escalationMessage.delete().catch(() => {
-          // Message might already be deleted, that's fine
+      let escalationMessage: any = null;
+      if (message.channel.isTextBased()) {
+        escalationMessage = await (message.channel as any).send({
+          content: mentionText,
+          embeds: [alertEmbed]
         });
-      }, 10 * 60 * 1000);
+
+        // Auto-delete the escalation message after 10 minutes to reduce clutter
+        setTimeout(() => {
+          if (escalationMessage) {
+            escalationMessage.delete().catch(() => {
+              // Message might already be deleted, that's fine
+            });
+          }
+        }, 10 * 60 * 1000);
+      }
 
       return {
         success: true,

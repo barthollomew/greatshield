@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { DatabaseManager, BotConfig, PolicyPack } from '../database/DatabaseManager.js';
+import { DatabaseManager, BotConfig } from '../database/DatabaseManager.js';
 import { OllamaManager } from '../ollama/OllamaManager.js';
 import fs from 'fs';
 import path from 'path';
@@ -63,7 +63,7 @@ export class SetupWizard {
   }
 
   private async collectDiscordConfig(): Promise<{discordToken: string, applicationId: string, publicKey: string, guildId: string}> {
-    const questions = [
+    const questions: any[] = [
       {
         type: 'input',
         name: 'discordToken',
@@ -120,7 +120,7 @@ export class SetupWizard {
       }
     ];
 
-    return await inquirer.prompt(questions);
+    return await inquirer.prompt(questions) as any;
   }
 
   private async selectPolicyPack(): Promise<number> {
@@ -157,7 +157,7 @@ export class SetupWizard {
   private async createCustomPolicyPack(): Promise<number> {
     console.log(chalk.blue('\nCreating a custom policy pack...'));
     
-    const questions = [
+    const questions: any[] = [
       {
         type: 'input',
         name: 'name',
@@ -191,7 +191,7 @@ export class SetupWizard {
       }
     ];
 
-    const config = await inquirer.prompt(questions);
+    const _config = await inquirer.prompt(questions);
 
     // Create custom policy pack in database
     // This would need additional implementation in DatabaseManager

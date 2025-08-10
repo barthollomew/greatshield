@@ -2,7 +2,8 @@ import {
   SlashCommandBuilder, 
   CommandInteraction, 
   EmbedBuilder,
-  PermissionFlagsBits 
+  PermissionFlagsBits,
+  ChatInputCommandInteraction 
 } from 'discord.js';
 import { BotCommand, GreatshieldBot } from '../GreatshieldBot.js';
 
@@ -33,7 +34,8 @@ export const GuardianCommand: BotCommand = {
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 
   async execute(interaction: CommandInteraction, bot: GreatshieldBot): Promise<void> {
-    const subcommand = interaction.options.data[0]?.name;
+    if (!interaction.isChatInputCommand()) return;
+    const subcommand = interaction.options.getSubcommand();
 
     switch (subcommand) {
       case 'status':
@@ -145,11 +147,12 @@ async function handleStatus(interaction: CommandInteraction, bot: GreatshieldBot
 }
 
 async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot): Promise<void> {
+  if (!interaction.isChatInputCommand()) return;
   await interaction.deferReply({ ephemeral: true });
 
   try {
-    const messageLink = interaction.options.get('message_link')?.value as string;
-    const reason = interaction.options.get('reason')?.value as string;
+    const messageLink = interaction.options.getString('message_link', true);
+    const reason = interaction.options.getString('reason', true);
 
     // Extract message ID from the link
     const messageLinkRegex = /https:\/\/discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)/;
@@ -162,7 +165,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
       return;
     }
 
-    const [, guildId, channelId, messageId] = match;
+    const [, _guildId, channelId, messageId] = match;
 
     // Check if the message was actually moderated
     const moderationLog = await bot.db.getModerationLogByMessageId(messageId);

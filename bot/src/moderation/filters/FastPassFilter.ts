@@ -40,7 +40,7 @@ export class FastPassFilter {
     });
   }
 
-  async checkMessage(content: string, userId: string, channelId: string): Promise<FastPassResult> {
+  async checkMessage(content: string, _userId: string, _channelId: string): Promise<FastPassResult> {
     // Check banned words
     const wordCheck = await this.checkBannedWords(content);
     if (wordCheck.triggered) {

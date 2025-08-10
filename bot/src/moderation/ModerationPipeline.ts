@@ -1,9 +1,9 @@
 import { Message } from 'discord.js';
-import { DatabaseManager, BotConfig, ModerationRule } from '../database/DatabaseManager.js';
+import { DatabaseManager, BotConfig } from '../database/DatabaseManager.js';
 import { OllamaManager } from '../ollama/OllamaManager.js';
 import { Logger } from '../utils/Logger.js';
-import { FastPassFilter, FastPassResult } from './filters/FastPassFilter.js';
-import { RAGSystem, AIAnalysisResult } from './RAGSystem.js';
+import { FastPassFilter } from './filters/FastPassFilter.js';
+import { RAGSystem } from './RAGSystem.js';
 import { ModerationActions, ActionResult } from './actions/ModerationActions.js';
 
 export interface ModerationResult {
@@ -18,7 +18,7 @@ export interface ModerationResult {
 
 export class ModerationPipeline {
   private db: DatabaseManager;
-  private ollama: OllamaManager;
+  private _ollama: OllamaManager;
   private logger: Logger;
   private fastPassFilter: FastPassFilter;
   private ragSystem: RAGSystem;
@@ -28,7 +28,7 @@ export class ModerationPipeline {
 
   constructor(db: DatabaseManager, ollama: OllamaManager, logger: Logger) {
     this.db = db;
-    this.ollama = ollama;
+    this._ollama = ollama;
     this.logger = logger;
     this.fastPassFilter = new FastPassFilter(db, logger);
     this.ragSystem = new RAGSystem(db, ollama, logger);
@@ -118,7 +118,7 @@ export class ModerationPipeline {
         return {
           actionTaken: result.action!,
           detectionType: 'fast_pass',
-          ruleTriggered: result.ruleTriggered,
+          ruleTriggered: result.ruleTriggered!,
           confidenceScores: { [result.ruleTriggered!]: result.confidence || 1.0 },
           reasoning: result.reason,
           success: actionResult.success,
@@ -197,7 +197,7 @@ export class ModerationPipeline {
         return {
           actionTaken: actionDecision.action,
           detectionType: 'ai_analysis',
-          ruleTriggered: actionDecision.ruleTriggered,
+          ruleTriggered: actionDecision.ruleTriggered!,
           confidenceScores,
           reasoning: reasoning,
           success: actionResult.success,
@@ -253,7 +253,7 @@ export class ModerationPipeline {
       }
 
       // Execute the action
-      const result = await this.moderationActions.executeAction(message, action, reason);
+      const result = await this.moderationActions.executeAction(action, message, reason);
 
       if (result.success) {
         this.logger.info('Moderation action executed', {
@@ -312,12 +312,12 @@ export class ModerationPipeline {
       initialized: this.isInitialized,
       fastPassReady: this.isInitialized,
       aiReady: this.isInitialized && Boolean(this.config?.selected_model),
-      config: this.config
+      config: this.config!
     };
   }
 
   // Method to get statistics
-  async getStatistics(timeframe: 'hour' | 'day' | 'week' = 'day'): Promise<{
+  async getStatistics(_timeframe: 'hour' | 'day' | 'week' = 'day'): Promise<{
     totalMessages: number;
     moderatedMessages: number;
     actionBreakdown: {[action: string]: number};

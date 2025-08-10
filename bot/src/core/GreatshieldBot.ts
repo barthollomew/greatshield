@@ -16,7 +16,7 @@ import { Logger } from '../utils/Logger.js';
 import chalk from 'chalk';
 
 export interface BotCommand {
-  data: SlashCommandBuilder;
+  data: any;
   execute: (interaction: CommandInteraction, bot: GreatshieldBot) => Promise<void>;
 }
 

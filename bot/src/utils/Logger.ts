@@ -187,5 +187,5 @@ export class Logger {
 
 // Export a default logger instance
 export const defaultLogger = Logger.create(
-  process.env.NODE_ENV as 'development' | 'production' | 'test' || 'production'
+  (process.env['NODE_ENV'] as 'development' | 'production' | 'test') || 'production'
 );
