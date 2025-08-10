@@ -119,6 +119,8 @@ dist/
 
 # Database files
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
 *.sqlite3
 
@@ -139,5 +141,4 @@ logs/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.dbgreatshield.db-shm
-greatshield.db-wal
+Thumbs.db
