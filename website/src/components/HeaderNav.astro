@@ -17,20 +17,23 @@ const currentPath = Astro.url.pathname;
     
     <nav class="hidden md:flex items-center gap-6 text-sm">
       <a 
-        href="/how-it-works" 
-        class={`hover:text-accent transition-colors ${currentPath === '/how-it-works' ? 'text-accent' : ''}`}
+        href="#how-it-works" 
+        class="nav-link hover:text-accent transition-colors"
+        data-section="how-it-works"
       >
         How It Works
       </a>
       <a 
-        href="/models" 
-        class={`hover:text-accent transition-colors ${currentPath === '/models' ? 'text-accent' : ''}`}
+        href="#models" 
+        class="nav-link hover:text-accent transition-colors"
+        data-section="models"
       >
         Models
       </a>
       <a 
-        href="/download" 
-        class={`hover:text-accent transition-colors ${currentPath === '/download' ? 'text-accent' : ''}`}
+        href="#download" 
+        class="nav-link hover:text-accent transition-colors"
+        data-section="download"
       >
         Download
       </a>

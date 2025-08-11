@@ -9,6 +9,7 @@
     font-family: 'JetBrains Mono', 'Fira Code', 'IBM Plex Mono', ui-monospace, monospace;
     background: #0b0b0e;
     color: #e7e7ea;
+    scroll-behavior: smooth;
   }
   
   body {
@@ -45,5 +46,9 @@
   
   .glyph {
     @apply w-4 h-4 text-accent;
+  }
+  
+  .nav-link.active {
+    @apply text-accent;
   }
 }

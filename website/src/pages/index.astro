@@ -4,6 +4,8 @@ import HeaderNav from '../components/HeaderNav.astro';
 import Footer from '../components/Footer.astro';
 import Card from '../components/Card';
 import CodeBlock from '../components/CodeBlock';
+import ModelTierCard from '../components/ModelTierCard';
+import InviteUrlBuilder from '../components/InviteUrlBuilder';
 ---
 
 <Layout title="Greatshield - AI-Powered Discord Moderation">
@@ -11,7 +13,7 @@ import CodeBlock from '../components/CodeBlock';
   
   <main>
     <!-- Hero Section -->
-    <section class="container mx-auto px-4 py-16 text-center">
+    <section id="hero" class="container mx-auto px-4 py-16 text-center">
       <div class="max-w-4xl mx-auto">
         <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-wide">
           AI-Powered Discord Moderation. Locally.
@@ -20,10 +22,10 @@ import CodeBlock from '../components/CodeBlock';
           Greatshield protects your Discord server with AI while keeping every byte on your machine.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/download" class="btn-primary rounded-sm px-8 py-3">
+          <a href="#download" class="btn-primary rounded-sm px-8 py-3 scroll-smooth">
             Download & Run Locally
           </a>
-          <a href="/how-it-works" class="btn-secondary rounded-sm px-8 py-3">
+          <a href="#how-it-works" class="btn-secondary rounded-sm px-8 py-3 scroll-smooth">
             How It Works
           </a>
         </div>
@@ -103,8 +105,413 @@ import CodeBlock from '../components/CodeBlock';
       </div>
     </section>
 
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="container mx-auto px-4 py-16">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+          A Radically Simple Workflow
+        </h2>
+        <p class="text-lg text-center text-foreground/80 mb-16 max-w-2xl mx-auto">
+          Three steps to get AI-powered moderation running entirely on your machine.
+        </p>
+
+        <!-- Three step cards -->
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+          <Card client:load>
+            <div class="text-center">
+              <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-accent">
+                1. Install
+              </h3>
+              <CodeBlock client:load>npx greatshield</CodeBlock>
+              <p class="text-sm text-foreground/70 mt-3">
+                Single command installation. No complex setup, no configuration files.
+              </p>
+            </div>
+          </Card>
+
+          <Card client:load>
+            <div class="text-center">
+              <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-accent">
+                2. Configure
+              </h3>
+              <p class="text-sm text-foreground/70 mb-3">
+                CLI wizard for policy & model; all local
+              </p>
+              <div class="text-xs font-mono text-foreground/60 space-y-1">
+                <div>Discord Bot Token: ****</div>
+                <div>Policy Pack: [Balanced]</div>
+                <div>AI Model: [Phi-2 2.7B]</div>
+                <div>Ollama: [Installing...]</div>
+              </div>
+            </div>
+          </Card>
+
+          <Card client:load>
+            <div class="text-center">
+              <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-accent">
+                3. Protect
+              </h3>
+              <p class="text-sm text-foreground/70 mb-3">
+                Moderation in real time via Discord Gateway
+              </p>
+              <div class="text-xs text-accent">
+                ✓ Fast-pass filtering<br/>
+                ✓ AI analysis<br/>
+                ✓ Action & logging
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        <!-- Under the Hood -->
+        <div class="max-w-6xl mx-auto">
+          <h3 class="text-2xl md:text-3xl font-bold text-center mb-12 tracking-wide">
+            Under the Hood
+          </h3>
+          
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+                Fast-Pass Filter
+              </h4>
+              <p class="text-sm text-foreground/80">
+                Instant regex-based detection for banned words, spam patterns, 
+                and blocked URLs. Catches obvious violations in milliseconds.
+              </p>
+            </Card>
+
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+                RAG Retrieval
+              </h4>
+              <p class="text-sm text-foreground/80">
+                Contextual policy lookup with recent channel messages. 
+                Provides AI with relevant rules and conversation history.
+              </p>
+            </Card>
+
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+                Local AI Analysis
+              </h4>
+              <p class="text-sm text-foreground/80">
+                Ollama-powered LLM runs entirely on your hardware. 
+                Analyzes toxicity, harassment, spam, and grooming risk.
+              </p>
+            </Card>
+
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+                Smart Actions
+              </h4>
+              <p class="text-sm text-foreground/80">
+                Graduated response system: mask minor issues, 
+                delete & warn serious violations, escalate concerning content.
+              </p>
+            </Card>
+
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+                Audit Trail
+              </h4>
+              <p class="text-sm text-foreground/80">
+                Complete logging to SQLite database and Discord mod-log channel. 
+                Full transparency with AI reasoning included.
+              </p>
+            </Card>
+
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+                Appeal System
+              </h4>
+              <p class="text-sm text-foreground/80">
+                Built-in slash commands allow users to appeal moderation actions. 
+                Human moderators can review and override AI decisions.
+              </p>
+            </Card>
+          </div>
+        </div>
+
+        <!-- Performance Characteristics -->
+        <div class="max-w-4xl mx-auto mt-16">
+          <h3 class="text-2xl md:text-3xl font-bold text-center mb-12 tracking-wide">
+            Performance Characteristics
+          </h3>
+          
+          <div class="grid md:grid-cols-2 gap-8">
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+                Fast-Pass Response
+              </h4>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span>Regex Filtering:</span>
+                  <span class="text-accent">< 1ms</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Spam Detection:</span>
+                  <span class="text-accent">< 5ms</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>URL Checking:</span>
+                  <span class="text-accent">< 10ms</span>
+                </div>
+              </div>
+            </Card>
+
+            <Card client:load>
+              <h4 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+                AI Analysis Response
+              </h4>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span>TinyLLaMA 1.1B:</span>
+                  <span class="text-accent">100-300ms</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Phi-2 2.7B:</span>
+                  <span class="text-accent">200-500ms</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Mistral 7B:</span>
+                  <span class="text-accent">500-1500ms</span>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Models Section -->
+    <section id="models" class="container mx-auto px-4 py-16">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+          Choose a Model That Fits Your Machine
+        </h2>
+        <p class="text-lg text-center text-foreground/80 mb-16 max-w-3xl mx-auto">
+          Greatshield works with multiple AI models via Ollama. Pick the one that matches 
+          your hardware capabilities and accuracy requirements.
+        </p>
+
+        <!-- Model tier cards -->
+        <div class="grid lg:grid-cols-3 gap-8 mb-16">
+          <ModelTierCard 
+            client:load
+            title="Low-End"
+            subtitle="TinyLLaMA 1.1B (Q4_K_M)"
+            ramUsage="~650MB"
+            latency="100-300ms"
+            features={[
+              "Fastest inference on older hardware",
+              "Minimal memory footprint", 
+              "Basic content classification",
+              "Good for simple filtering tasks"
+            ]}
+            modelName="tinyllama:1.1b-q4_k_m"
+          />
+
+          <ModelTierCard 
+            client:load
+            title="Mid-Range"
+            subtitle="Phi-2 2.7B (Q4_K_M)"
+            ramUsage="~850MB"
+            latency="200-500ms"
+            features={[
+              "Excellent balance of speed & accuracy",
+              "Strong reasoning capabilities",
+              "Handles nuanced content well",
+              "Recommended for most users"
+            ]}
+            modelName="phi:2.7b-q4_k_m"
+            recommended={true}
+          />
+
+          <ModelTierCard 
+            client:load
+            title="High-End"
+            subtitle="Mistral 7B Instruct (Q4_K_M)"
+            ramUsage="~4.2GB"
+            latency="500-1500ms"
+            features={[
+              "Best accuracy and reasoning",
+              "Excellent context understanding",
+              "Handles complex edge cases",
+              "Ideal for large communities"
+            ]}
+            modelName="mistral:7b-instruct-q4_k_m"
+          />
+        </div>
+
+        <!-- System requirements -->
+        <div class="grid md:grid-cols-2 gap-8">
+          <Card client:load>
+            <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              System Requirements
+            </h3>
+            <div class="space-y-4 text-sm">
+              <div>
+                <h4 class="font-semibold text-accent mb-2">Minimum:</h4>
+                <ul class="space-y-1 text-foreground/80">
+                  <li>• 4GB RAM (2GB available for AI)</li>
+                  <li>• Dual-core CPU (2015 or newer)</li>
+                  <li>• 10GB free disk space</li>
+                  <li>• Node.js 20+ and npm</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 class="font-semibold text-accent mb-2">Recommended:</h4>
+                <ul class="space-y-1 text-foreground/80">
+                  <li>• 8GB RAM (4GB available for AI)</li>
+                  <li>• Quad-core CPU with AVX2 support</li>
+                  <li>• SSD storage for better model loading</li>
+                  <li>• Stable internet for initial model download</li>
+                </ul>
+              </div>
+            </div>
+          </Card>
+
+          <Card client:load>
+            <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+              Performance Tuning
+            </h3>
+            <div class="space-y-4 text-sm">
+              <div>
+                <h4 class="font-semibold text-accent mb-2">Memory Optimization:</h4>
+                <ul class="space-y-1 text-foreground/80">
+                  <li>• Close unnecessary applications</li>
+                  <li>• Use Q4_K_M quantized models</li>
+                  <li>• Consider CPU-only mode for stability</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 class="font-semibold text-accent mb-2">Speed Optimization:</h4>
+                <ul class="space-y-1 text-foreground/80">
+                  <li>• Enable GPU acceleration if available</li>
+                  <li>• Use smaller models for high-traffic servers</li>
+                  <li>• Adjust context length in Ollama settings</li>
+                </ul>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="container mx-auto px-4 py-16">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+          Install & Run Locally
+        </h2>
+        <p class="text-lg text-center text-foreground/80 mb-16 max-w-2xl mx-auto">
+          Get Greatshield running on your machine in minutes. No cloud services, 
+          no external dependencies, complete privacy.
+        </p>
+
+        <!-- Installation -->
+        <div class="mb-16">
+          <div class="grid md:grid-cols-2 gap-8">
+            <Card client:load>
+              <h3 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+                Quick Start
+              </h3>
+              <CodeBlock client:load>npx greatshield</CodeBlock>
+              <p class="text-sm text-foreground/70 mt-3">
+                This command will download, install, and run the setup wizard. 
+                Perfect for first-time users who want guided configuration.
+              </p>
+            </Card>
+
+            <Card client:load>
+              <h3 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+                Setup Wizard Flow
+              </h3>
+              <div class="font-mono text-xs space-y-1 text-foreground/70">
+                <div>$ npx greatshield</div>
+                <div class="text-accent">? Discord Bot Token: ****</div>
+                <div class="text-accent">? Guild ID: 123456789012345678</div>
+                <div class="text-accent">? Policy Pack: [Balanced Moderation]</div>
+                <div class="text-accent">? AI Model: [Phi-2 2.7B - Recommended]</div>
+                <div class="text-accent">? Installing Ollama...</div>
+                <div class="text-accent">? Downloading model...</div>
+                <div>✓ Setup complete! Run 'greatshield start'</div>
+              </div>
+            </Card>
+          </div>
+        </div>
+
+        <!-- Requirements -->
+        <Card client:load className="mb-8">
+          <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+            Requirements
+          </h3>
+          <div class="grid md:grid-cols-2 gap-6 text-sm">
+            <div>
+              <h4 class="font-semibold text-accent mb-2">System:</h4>
+              <ul class="space-y-1 text-foreground/80">
+                <li>• Node.js 20.0+ and npm</li>
+                <li>• 4GB+ RAM (2GB available for AI models)</li>
+                <li>• 10GB+ free disk space (for models and logs)</li>
+                <li>• Internet connection for initial setup</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold text-accent mb-2">Dependencies:</h4>
+              <ul class="space-y-1 text-foreground/80">
+                <li>• SQLite (bundled automatically)</li>
+                <li>• Ollama (installed during setup)</li>
+                <li>• Discord bot with proper permissions</li>
+                <li>• Access to target Discord server</li>
+              </ul>
+            </div>
+          </div>
+        </Card>
+
+        <!-- Discord Bot Setup -->
+        <InviteUrlBuilder client:load />
+
+        <!-- Post-Installation -->
+        <Card client:load className="mt-8">
+          <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+            After Installation
+          </h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="text-sm font-semibold mb-2 uppercase tracking-wide text-accent">
+                Start Monitoring:
+              </h4>
+              <CodeBlock client:load>
+{`# Start the bot
+greatshield start
+
+# Check status
+greatshield status
+
+# View logs
+greatshield logs --follow`}
+              </CodeBlock>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold mb-2 uppercase tracking-wide text-accent">
+                Discord Commands:
+              </h4>
+              <div class="text-sm space-y-1 text-foreground/80">
+                <div><code>/guardian status</code> - Check bot health</div>
+                <div><code>/guardian appeal</code> - Appeal moderation actions</div>
+                <div>Automatic moderation runs in background</div>
+                <div>Check your mod-log channel for activity</div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </section>
+
     <!-- Features Section -->
-    <section class="container mx-auto px-4 py-16">
+    <section id="features" class="container mx-auto px-4 py-16">
       <div class="max-w-6xl mx-auto">
         <h2 class="text-2xl md:text-3xl font-bold text-center mb-12 tracking-wide">
           Privacy-First Moderation
@@ -143,7 +550,89 @@ import CodeBlock from '../components/CodeBlock';
         </div>
       </div>
     </section>
+
+    <!-- Back to Top Button -->
+    <div class="fixed bottom-8 right-8 z-50">
+      <a 
+        href="#hero" 
+        id="back-to-top"
+        class="btn-secondary rounded-full p-3 opacity-0 transition-opacity duration-300 hover:bg-accent hover:text-background"
+        aria-label="Back to top"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
   </main>
 
   <Footer />
 </Layout>
+
+<script>
+  // Enhanced single-page navigation
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+
+    // Back to top button visibility
+    const backToTop = document.getElementById('back-to-top');
+    
+    // Active section tracking
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    function updateActiveSection() {
+      let current = '';
+      const scrollY = window.scrollY + 100; // Offset for header
+      
+      sections.forEach(section => {
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionHeight = (section as HTMLElement).offsetHeight;
+        
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          current = section.getAttribute('id') || '';
+        }
+      });
+      
+      // Update navigation links
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-section') === current) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', function() {
+      // Back to top button
+      if (window.scrollY > 500) {
+        backToTop?.classList.remove('opacity-0');
+        backToTop?.classList.add('opacity-100');
+      } else {
+        backToTop?.classList.add('opacity-0');
+        backToTop?.classList.remove('opacity-100');
+      }
+      
+      // Update active section
+      updateActiveSection();
+    });
+
+    // Smooth scroll for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href') as string);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Initial active section update
+    updateActiveSection();
+  });
+</script>
