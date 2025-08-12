@@ -14,24 +14,20 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
   <main>
     <!-- Hero Section -->
     <section id="hero" class="section-spacing text-center">
-      <div class="max-w-4xl mx-auto">
-        <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 tracking-wide text-text">
-          AI-Powered Discord Moderation. Locally.
-        </h1>
-        <p class="text-lg md:text-xl text-textMuted mb-8 max-w-2xl mx-auto">
-          Greatshield protects your Discord server with AI while keeping every byte on your machine.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a 
-            href="#download" 
-            class="btn-primary px-8 py-3 transition-colors"
-          >
+      <div class="max-w-5xl mx-auto content-spacing">
+        <div class="text-spacing">
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-bold tracking-wide text-text">
+            AI-Powered Discord Moderation. Locally.
+          </h1>
+          <p class="text-lg md:text-xl lg:text-2xl text-textMuted max-w-3xl mx-auto leading-relaxed">
+            Greatshield protects your Discord server with AI while keeping every byte on your machine.
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-6 justify-center mt-12">
+          <a href="#download" class="btn-primary">
             Download & Run Locally
           </a>
-          <a 
-            href="#how-it-works" 
-            class="btn-secondary px-8 py-3 transition-colors"
-          >
+          <a href="#how-it-works" class="btn-secondary">
             How It Works
           </a>
         </div>
@@ -39,8 +35,9 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
     </section>
 
     <!-- Diagram Section -->
-    <section class="section-spacing">
-      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+    <section class="section-spacing-sm">
+      <div class="container">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 max-w-5xl mx-auto">
         <!-- Left: Your Message -->
         <Card client:load>
           <div class="text-center mb-4">
@@ -91,21 +88,21 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
     </section>
 
     <!-- Stats Section -->
-    <section class="py-8">
+    <section class="section-spacing-sm">
       <div class="container">
-        <div class="flex flex-wrap justify-center gap-6">
-          <div class="rounded-md border border-border bg-surface px-6 py-3 text-center shadow-sm">
-            <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+        <div class="flex flex-wrap justify-center gap-8 lg:gap-12">
+          <div class="rounded-lg border border-border bg-surface px-8 py-6 text-center shadow-sm hover:shadow-md transition-shadow">
+            <div class="text-accent text-base font-semibold uppercase tracking-wide">
               Local Inference
             </div>
           </div>
-          <div class="rounded-md border border-border bg-surface px-6 py-3 text-center shadow-sm">
-            <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+          <div class="rounded-lg border border-border bg-surface px-8 py-6 text-center shadow-sm hover:shadow-md transition-shadow">
+            <div class="text-accent text-base font-semibold uppercase tracking-wide">
               No Hosting
             </div>
           </div>
-          <div class="rounded-md border border-border bg-surface px-6 py-3 text-center shadow-sm">
-            <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+          <div class="rounded-lg border border-border bg-surface px-8 py-6 text-center shadow-sm hover:shadow-md transition-shadow">
+            <div class="text-accent text-base font-semibold uppercase tracking-wide">
               Policy Packs
             </div>
           </div>
@@ -115,16 +112,19 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
 
     <!-- How It Works Section -->
     <section id="how-it-works" class="section-spacing">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-3xl md:text-5xl font-serif font-bold text-center mb-8 tracking-wide text-text">
-          A Radically Simple Workflow
-        </h2>
-        <p class="text-lg text-center text-textMuted mb-16 max-w-2xl mx-auto">
-          Three steps to get AI-powered moderation running entirely on your machine.
-        </p>
+      <div class="container">
+        <div class="max-w-6xl mx-auto content-spacing">
+          <div class="text-center text-spacing">
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-serif font-bold tracking-wide text-text">
+              A Radically Simple Workflow
+            </h2>
+            <p class="text-lg md:text-xl text-textMuted max-w-3xl mx-auto leading-relaxed">
+              Three steps to get AI-powered moderation running entirely on your machine.
+            </p>
+          </div>
 
-        <!-- Three step cards -->
-        <div class="grid md:grid-cols-3 gap-8 mb-16">
+          <!-- Three step cards -->
+          <div class="grid md:grid-cols-3 gap-10 lg:gap-16">
           <Card client:load>
             <div class="text-center">
               <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-accent">
@@ -173,11 +173,11 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
 
         <!-- Under the Hood -->
         <div class="max-w-6xl mx-auto">
-          <h3 class="text-2xl md:text-3xl font-serif font-bold text-center mb-12 tracking-wide text-text">
+          <h3 class="text-2xl md:text-3xl font-serif font-bold text-center mb-16 tracking-wide text-text">
             Under the Hood
           </h3>
           
-          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             <Card client:load>
               <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
                 Fast-Pass Filter
@@ -241,12 +241,12 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
         </div>
 
         <!-- Performance Characteristics -->
-        <div class="max-w-4xl mx-auto mt-16">
-          <h3 class="text-2xl md:text-3xl font-serif font-bold text-center mb-12 tracking-wide text-text">
+        <div class="max-w-4xl mx-auto mt-20 lg:mt-24">
+          <h3 class="text-2xl md:text-3xl font-serif font-bold text-center mb-16 tracking-wide text-text">
             Performance Characteristics
           </h3>
           
-          <div class="grid md:grid-cols-2 gap-8">
+          <div class="grid md:grid-cols-2 gap-10 lg:gap-12">
             <Card client:load>
               <h4 class="text-lg font-semibold mb-4 uppercase tracking-wide text-text">
                 Fast-Pass Response
@@ -293,17 +293,20 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
 
     <!-- Models Section -->
     <section id="models" class="section-spacing">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-3xl md:text-5xl font-serif font-bold text-center mb-8 tracking-wide text-text">
-          Choose a Model That Fits Your Machine
-        </h2>
-        <p class="text-lg text-center text-textMuted mb-16 max-w-3xl mx-auto">
-          Greatshield works with multiple AI models via Ollama. Pick the one that matches 
-          your hardware capabilities and accuracy requirements.
-        </p>
+      <div class="container">
+        <div class="max-w-6xl mx-auto content-spacing">
+          <div class="text-center text-spacing">
+            <h2 class="text-3xl md:text-5xl font-serif font-bold tracking-wide text-text">
+              Choose a Model That Fits Your Machine
+            </h2>
+            <p class="text-lg text-textMuted max-w-3xl mx-auto">
+              Greatshield works with multiple AI models via Ollama. Pick the one that matches 
+              your hardware capabilities and accuracy requirements.
+            </p>
+          </div>
 
-        <!-- Model tier cards -->
-        <div class="grid lg:grid-cols-3 gap-8 mb-16">
+          <!-- Model tier cards -->
+          <div class="grid lg:grid-cols-3 gap-10 lg:gap-12">
           <ModelTierCard 
             client:load
             title="Low-End"
@@ -349,10 +352,10 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
             ]}
             modelName="mistral:7b-instruct-q4_k_m"
           />
-        </div>
+          </div>
 
-        <!-- System requirements -->
-        <div class="grid md:grid-cols-2 gap-8">
+          <!-- System requirements -->
+          <div class="grid md:grid-cols-2 gap-10 lg:gap-12">
           <Card client:load>
             <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide text-text">
               System Requirements
@@ -404,24 +407,28 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
               </div>
             </div>
           </Card>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Download Section -->
     <section id="download" class="section-spacing">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-3xl md:text-5xl font-serif font-bold text-center mb-8 tracking-wide text-text">
-          Install & Run Locally
-        </h2>
-        <p class="text-lg text-center text-textMuted mb-16 max-w-2xl mx-auto">
-          Get Greatshield running on your machine in minutes. No cloud services, 
-          no external dependencies, complete privacy.
-        </p>
+      <div class="container">
+        <div class="max-w-4xl mx-auto content-spacing">
+          <div class="text-center text-spacing">
+            <h2 class="text-3xl md:text-5xl font-serif font-bold tracking-wide text-text">
+              Install & Run Locally
+            </h2>
+            <p class="text-lg text-textMuted max-w-2xl mx-auto">
+              Get Greatshield running on your machine in minutes. No cloud services, 
+              no external dependencies, complete privacy.
+            </p>
+          </div>
 
-        <!-- Installation -->
-        <div class="mb-16">
-          <div class="grid md:grid-cols-2 gap-8">
+          <!-- Installation -->
+          <div class="element-spacing">
+            <div class="grid md:grid-cols-2 gap-10 lg:gap-12">
             <Card client:load>
               <h3 class="text-lg font-semibold mb-4 uppercase tracking-wide text-text">
                 Quick Start
@@ -448,11 +455,11 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
                 <div class="text-text">✓ Setup complete! Run 'greatshield start'</div>
               </div>
             </Card>
+            </div>
           </div>
-        </div>
 
-        <!-- Requirements -->
-        <Card client:load className="mb-8">
+          <!-- Requirements -->
+          <Card client:load>
           <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide text-text">
             Requirements
           </h3>
@@ -476,13 +483,13 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
               </ul>
             </div>
           </div>
-        </Card>
+          </Card>
 
-        <!-- Discord Bot Setup -->
-        <InviteUrlBuilder client:load />
+          <!-- Discord Bot Setup -->
+          <InviteUrlBuilder client:load />
 
-        <!-- Post-Installation -->
-        <Card client:load className="mt-8">
+          <!-- Post-Installation -->
+          <Card client:load>
           <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide text-text">
             After Installation
           </h3>
@@ -514,18 +521,20 @@ greatshield logs --follow`}
               </div>
             </div>
           </div>
-        </Card>
+          </Card>
+        </div>
       </div>
     </section>
 
     <!-- Features Section -->
     <section id="features" class="section-spacing">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl md:text-3xl font-serif font-bold text-center mb-12 tracking-wide text-text">
-          Privacy-First Moderation
-        </h2>
+      <div class="container">
+        <div class="max-w-6xl mx-auto content-spacing">
+          <h2 class="text-2xl md:text-3xl font-serif font-bold text-center tracking-wide text-text">
+            Privacy-First Moderation
+          </h2>
         
-        <div class="grid md:grid-cols-3 gap-8">
+          <div class="grid md:grid-cols-3 gap-10 lg:gap-12">
           <Card client:load>
             <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
               100% Local Processing
@@ -555,6 +564,7 @@ greatshield logs --follow`}
               Customize thresholds and actions to fit your community.
             </p>
           </Card>
+          </div>
         </div>
       </div>
     </section>

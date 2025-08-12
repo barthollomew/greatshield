@@ -104,28 +104,40 @@
 
 @layer components {
   .container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-12;
   }
   
   .section-spacing {
-    @apply py-16 sm:py-20 lg:py-24;
+    @apply py-20 sm:py-24 lg:py-32;
   }
   
-  .space-section {
-    @apply space-y-8;
+  .section-spacing-sm {
+    @apply py-12 sm:py-16 lg:py-20;
   }
   
-  /* Legacy button classes for backward compatibility */
+  .content-spacing {
+    @apply space-y-12 sm:space-y-16 lg:space-y-20;
+  }
+  
+  .element-spacing {
+    @apply space-y-8 sm:space-y-10 lg:space-y-12;
+  }
+  
+  .text-spacing {
+    @apply space-y-4 sm:space-y-6;
+  }
+  
+  /* Button styles with proper spacing */
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-md bg-accent text-white font-medium px-4 py-2 transition-colors hover:bg-accentHover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center rounded-md bg-accent text-white font-medium px-6 py-3 text-base transition-all duration-200 hover:bg-accentHover hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
   }
   
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-md bg-surface border border-border text-text font-medium px-4 py-2 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center rounded-md bg-surface border border-border text-text font-medium px-6 py-3 text-base transition-all duration-200 hover:bg-muted hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
   }
   
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-md text-text font-medium px-4 py-2 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center rounded-md text-text font-medium px-4 py-2 text-sm transition-all duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
   }
   
   /* Card component */
