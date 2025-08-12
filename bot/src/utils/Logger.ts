@@ -2,9 +2,11 @@ import winston from 'winston';
 import path from 'path';
 import fs from 'fs';
 import { ILogger, LogContext } from '../core/interfaces/ILogger';
+import { ErrorHandler, ErrorCategory, ErrorSeverity } from './ErrorHandler';
 
 export class Logger implements ILogger {
   private winston: winston.Logger;
+  private errorHandler?: ErrorHandler;
 
   constructor(logLevel: string = 'info', logFile?: string) {
     // Ensure logs directory exists
@@ -82,6 +84,23 @@ export class Logger implements ILogger {
         maxFiles: 2
       })
     );
+
+    // Initialize error handler after winston logger is set up
+    this.errorHandler = new ErrorHandler(this);
+  }
+
+  /**
+   * Set error handler for structured error logging
+   */
+  setErrorHandler(errorHandler: ErrorHandler): void {
+    this.errorHandler = errorHandler;
+  }
+
+  /**
+   * Get error handler instance
+   */
+  getErrorHandler(): ErrorHandler | undefined {
+    return this.errorHandler;
   }
 
   info(message: string, context?: LogContext): void {
@@ -92,8 +111,17 @@ export class Logger implements ILogger {
     this.winston.warn(message, context);
   }
 
-  error(message: string, context?: LogContext): void {
+  error(message: string, context?: LogContext, error?: Error): void {
     this.winston.error(message, context);
+    
+    // Log structured error if error handler is available
+    if (this.errorHandler && error) {
+      this.errorHandler.handleError(error, ErrorCategory.UNKNOWN, ErrorSeverity.HIGH, {
+        operation: 'logging',
+        component: 'logger',
+        ...context
+      });
+    }
   }
 
   debug(message: string, context?: LogContext): void {

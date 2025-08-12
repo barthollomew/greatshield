@@ -2,6 +2,10 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 import { IDatabaseManager } from '../core/interfaces/IDatabaseManager';
+import { CacheManager } from '../performance/CacheManager';
+import { ConnectionPool } from '../performance/ConnectionPool';
+import { DatabaseOptimizer } from '../performance/DatabaseOptimizer';
+import { Logger } from '../utils/Logger';
 
 export interface PolicyPack {
   id: number;
@@ -60,9 +64,21 @@ export interface BotConfig {
 export class DatabaseManager implements IDatabaseManager {
   private db: Database.Database | null = null;
   private dbPath: string;
+  private logger: Logger;
+  private cache: CacheManager;
+  private connectionPool?: ConnectionPool;
+  private optimizer?: DatabaseOptimizer;
+  private enablePerformanceFeatures: boolean;
 
-  constructor(dbPath: string = './greatshield.db') {
+  constructor(dbPath: string = './greatshield.db', enablePerformanceFeatures: boolean = true) {
     this.dbPath = path.resolve(dbPath);
+    this.logger = new Logger('DatabaseManager');
+    this.cache = new CacheManager(this.logger, {
+      maxSize: 500,
+      defaultTtl: 5 * 60 * 1000, // 5 minutes
+      enableStats: true
+    });
+    this.enablePerformanceFeatures = enablePerformanceFeatures;
   }
 
   async initialize(): Promise<void> {
@@ -72,11 +88,45 @@ export class DatabaseManager implements IDatabaseManager {
         fs.mkdirSync(dbDir, { recursive: true });
       }
 
-      this.db = new Database(this.dbPath);
-      this.db.pragma('journal_mode = WAL');
+      if (this.enablePerformanceFeatures) {
+        // Initialize connection pool
+        this.connectionPool = new ConnectionPool(this.dbPath, this.logger, {
+          maxConnections: 10,
+          minConnections: 2,
+          acquireTimeout: 30000,
+          idleTimeout: 5 * 60 * 1000
+        });
+        
+        await this.connectionPool.initialize();
+        
+        // Get primary connection for setup
+        const connection = await this.connectionPool.acquire();
+        this.db = connection.db;
+        
+        // Don't release yet - we need it for setup
+        await this.createTables();
+        await this.seedDatabase();
+        
+        // Initialize optimizer
+        this.optimizer = new DatabaseOptimizer(this.db, this.logger);
+        
+        // Run optimization
+        await this.optimizer.optimize();
+        
+        // Now release the connection
+        await this.connectionPool.release(connection);
+        
+        this.logger.info('Database initialized with performance features enabled');
+      } else {
+        // Simple initialization without performance features
+        this.db = new Database(this.dbPath);
+        this.db.pragma('journal_mode = WAL');
 
-      await this.createTables();
-      await this.seedDatabase();
+        await this.createTables();
+        await this.seedDatabase();
+        
+        this.logger.info('Database initialized with basic configuration');
+      }
     } catch (error) {
       throw new Error(`Failed to initialize database: ${error}`);
     }
@@ -120,12 +170,6 @@ export class DatabaseManager implements IDatabaseManager {
     }
   }
 
-  async close(): Promise<void> {
-    if (this.db) {
-      this.db.close();
-      this.db = null;
-    }
-  }
 
   // Policy Pack Methods
   async getPolicyPacks(): Promise<PolicyPack[]> {
@@ -176,9 +220,20 @@ export class DatabaseManager implements IDatabaseManager {
       throw new Error('Database not initialized. Call initialize() first.');
     }
     
+    const cacheKey = `moderation_rules_${policyPackId}`;
+    
     try {
-      const stmt = this.db.prepare('SELECT * FROM moderation_rules WHERE policy_pack_id = ? AND enabled = 1');
-      return stmt.all(policyPackId) as ModerationRule[];
+      return await this.cache.getOrSet(cacheKey, async () => {
+        if (this.connectionPool) {
+          return await this.connectionPool.execute((db) => {
+            const stmt = db.prepare('SELECT * FROM moderation_rules WHERE policy_pack_id = ? AND enabled = 1');
+            return stmt.all(policyPackId) as ModerationRule[];
+          });
+        } else {
+          const stmt = this.db!.prepare('SELECT * FROM moderation_rules WHERE policy_pack_id = ? AND enabled = 1');
+          return stmt.all(policyPackId) as ModerationRule[];
+        }
+      }, 10 * 60 * 1000); // Cache for 10 minutes
     } catch (error) {
       throw new Error(`Failed to get moderation rules: ${error}`);
     }
@@ -316,9 +371,20 @@ export class DatabaseManager implements IDatabaseManager {
       throw new Error('Database not initialized. Call initialize() first.');
     }
     
+    const cacheKey = `banned_words_${policyPackId}`;
+    
     try {
-      const stmt = this.db.prepare('SELECT word_or_phrase, is_regex, severity, action FROM banned_words WHERE policy_pack_id = ? AND enabled = 1');
-      return stmt.all(policyPackId) as Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>;
+      return await this.cache.getOrSet(cacheKey, async () => {
+        if (this.connectionPool) {
+          return await this.connectionPool.execute((db) => {
+            const stmt = db.prepare('SELECT word_or_phrase, is_regex, severity, action FROM banned_words WHERE policy_pack_id = ? AND enabled = 1');
+            return stmt.all(policyPackId) as Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>;
+          });
+        } else {
+          const stmt = this.db!.prepare('SELECT word_or_phrase, is_regex, severity, action FROM banned_words WHERE policy_pack_id = ? AND enabled = 1');
+          return stmt.all(policyPackId) as Array<{word_or_phrase: string, is_regex: boolean, severity: string, action: string}>;
+        }
+      }, 15 * 60 * 1000); // Cache for 15 minutes
     } catch (error) {
       throw new Error(`Failed to get banned words: ${error}`);
     }
@@ -336,5 +402,141 @@ export class DatabaseManager implements IDatabaseManager {
     } catch (error) {
       throw new Error(`Failed to get blocked URLs: ${error}`);
     }
+  }
+
+  // Rate Limit Violation Logging
+  async logRateLimitViolation(userId: string, channelId: string, violationType: string, violationCount: number): Promise<void> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+    
+    try {
+      // Create rate_limit_violations table if it doesn't exist
+      this.db.prepare(`
+        CREATE TABLE IF NOT EXISTS rate_limit_violations (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          channel_id TEXT NOT NULL,
+          violation_type TEXT NOT NULL,
+          violation_count INTEGER NOT NULL,
+          timestamp TEXT NOT NULL DEFAULT (datetime('now')),
+          INDEX idx_user_timestamp (user_id, timestamp),
+          INDEX idx_channel_timestamp (channel_id, timestamp)
+        )
+      `).run();
+
+      const stmt = this.db.prepare(`
+        INSERT INTO rate_limit_violations (user_id, channel_id, violation_type, violation_count)
+        VALUES (?, ?, ?, ?)
+      `);
+      
+      stmt.run(userId, channelId, violationType, violationCount);
+    } catch (error) {
+      throw new Error(`Failed to log rate limit violation: ${error}`);
+    }
+  }
+
+  // Performance and cache management methods
+  
+  /**
+   * Get performance statistics
+   */
+  getPerformanceStats(): {
+    cache: any;
+    connectionPool?: any;
+    optimizer?: any;
+  } {
+    const stats: any = {
+      cache: this.cache.getStats()
+    };
+
+    if (this.connectionPool) {
+      stats.connectionPool = this.connectionPool.getMetrics();
+    }
+
+    if (this.optimizer) {
+      stats.optimizer = {
+        available: true,
+        // Add optimizer-specific stats here if needed
+      };
+    }
+
+    return stats;
+  }
+
+  /**
+   * Clear cache for specific keys or all cache
+   */
+  clearCache(pattern?: string): void {
+    if (pattern) {
+      // Clear specific cache entries matching pattern
+      const keys = this.cache.keys();
+      for (const key of keys) {
+        if (key.includes(pattern)) {
+          this.cache.delete(key);
+        }
+      }
+      this.logger.info('Cache cleared for pattern', { pattern });
+    } else {
+      this.cache.clear();
+      this.logger.info('All cache cleared');
+    }
+  }
+
+  /**
+   * Optimize database performance
+   */
+  async optimizeDatabase(): Promise<any> {
+    if (!this.optimizer) {
+      throw new Error('Database optimizer not available');
+    }
+    
+    return await this.optimizer.optimize();
+  }
+
+  /**
+   * Get database health metrics
+   */
+  async getHealthMetrics(): Promise<any> {
+    if (!this.optimizer) {
+      throw new Error('Database optimizer not available');
+    }
+    
+    return await this.optimizer.getHealthMetrics();
+  }
+
+  /**
+   * Check connection pool health
+   */
+  getConnectionPoolStatus(): any {
+    if (!this.connectionPool) {
+      return { available: false };
+    }
+    
+    return this.connectionPool.getStatus();
+  }
+
+
+  /**
+   * Clean up resources
+   */
+  async close(): Promise<void> {
+    this.logger.info('Closing database manager');
+    
+    // Clean up cache
+    this.cache.destroy();
+    
+    // Clean up connection pool
+    if (this.connectionPool) {
+      await this.connectionPool.destroy();
+    }
+    
+    // Close direct connection if exists
+    if (this.db && !this.connectionPool) {
+      this.db.close();
+      this.db = null;
+    }
+    
+    this.logger.info('Database manager closed');
   }
 }

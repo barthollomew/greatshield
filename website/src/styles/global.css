@@ -1,54 +1,162 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg: #FAFAFA;
+    --surface: #FFFFFF;
+    --muted: #F5F5F7;
+    --text: #1A1A1A;
+    --text-muted: #555555;
+    --border: #E5E5E5;
+    --accent: #FF7A00;
+    --accent-hover: #FF8F26;
+    --accent-soft: #FFD166;
+    --radius-sm: 0.375rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --ring-offset: 2px;
+  }
+
   html {
-    font-family: 'JetBrains Mono', 'Fira Code', 'IBM Plex Mono', ui-monospace, monospace;
-    background: #0b0b0e;
-    color: #e7e7ea;
+    color: var(--text);
+    background: var(--bg);
     scroll-behavior: smooth;
   }
   
   body {
-    background: #0b0b0e;
-    background-image: 
-      radial-gradient(circle at 50% 50%, rgba(198, 162, 103, 0.05) 0%, transparent 70%),
-      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.025'/%3E%3C/svg%3E");
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
     min-height: 100vh;
+    line-height: 1.5;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  
+  h1 {
+    font-size: clamp(2rem, 4vw + 1rem, 3.5rem);
+    line-height: 1.15;
+  }
+  
+  h2 {
+    font-size: clamp(1.75rem, 3vw + 1rem, 2.75rem);
+    line-height: 1.2;
+  }
+  
+  h3 {
+    font-size: clamp(1.5rem, 2.5vw + 1rem, 2.25rem);
+    line-height: 1.25;
+  }
+  
+  p {
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text);
+  }
+  
+  small {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  
+  a {
+    color: var(--accent);
+    text-decoration-line: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+  
+  a:hover {
+    color: var(--accent-hover);
   }
   
   code {
-    font-family: inherit;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    background: var(--muted);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: var(--ring-offset);
+  }
+
+  /* Selection styles */
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--text);
   }
 }
 
 @layer components {
-  .card {
-    @apply border border-border bg-background/50 hover:border-border-hover transition-colors duration-200;
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
+  .section-spacing {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+  
+  .space-section {
+    @apply space-y-8;
+  }
+  
+  /* Legacy button classes for backward compatibility */
   .btn-primary {
-    @apply bg-accent text-background hover:bg-accent/90 font-semibold px-4 py-2 border border-accent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent;
+    @apply inline-flex items-center justify-center rounded-md bg-accent text-white font-medium px-4 py-2 transition-colors hover:bg-accentHover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
   }
   
   .btn-secondary {
-    @apply border border-border hover:border-border-hover text-foreground px-4 py-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent;
+    @apply inline-flex items-center justify-center rounded-md bg-surface border border-border text-text font-medium px-4 py-2 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
   }
   
-  .glyph {
-    @apply w-4 h-4 text-accent;
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-md text-text font-medium px-4 py-2 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+  }
+  
+  /* Card component */
+  .card {
+    @apply bg-surface shadow-sm rounded-lg border border-border;
+  }
+  
+  /* Navigation */
+  .nav-link {
+    @apply text-text hover:text-accent transition-colors duration-200;
   }
   
   .nav-link.active {
     @apply text-accent;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--muted);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
   }
 }

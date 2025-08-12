@@ -13,19 +13,25 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
   
   <main>
     <!-- Hero Section -->
-    <section id="hero" class="container mx-auto px-4 py-16 text-center">
+    <section id="hero" class="section-spacing text-center">
       <div class="max-w-4xl mx-auto">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-wide">
+        <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 tracking-wide text-text">
           AI-Powered Discord Moderation. Locally.
         </h1>
-        <p class="text-lg md:text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
+        <p class="text-lg md:text-xl text-textMuted mb-8 max-w-2xl mx-auto">
           Greatshield protects your Discord server with AI while keeping every byte on your machine.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="#download" class="btn-primary rounded-sm px-8 py-3 scroll-smooth">
+          <a 
+            href="#download" 
+            class="btn-primary px-8 py-3 transition-colors"
+          >
             Download & Run Locally
           </a>
-          <a href="#how-it-works" class="btn-secondary rounded-sm px-8 py-3 scroll-smooth">
+          <a 
+            href="#how-it-works" 
+            class="btn-secondary px-8 py-3 transition-colors"
+          >
             How It Works
           </a>
         </div>
@@ -33,7 +39,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
     </section>
 
     <!-- Diagram Section -->
-    <section class="container mx-auto px-4 py-16">
+    <section class="section-spacing">
       <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         <!-- Left: Your Message -->
         <Card client:load>
@@ -42,15 +48,15 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
               1. Your Message
             </h3>
           </div>
-          <div class="border border-border rounded-sm p-3 bg-background/30 font-mono text-sm">
+          <div class="border border-border rounded-md p-3 bg-muted font-mono text-sm">
             <div class="flex items-start gap-3">
               <div class="w-8 h-8 bg-accent rounded-full flex-shrink-0"></div>
               <div>
                 <div class="text-accent text-xs mb-1">user#1234</div>
-                <div class="text-foreground">
+                <div class="text-text">
                   This is a sample Discord message that might contain problematic content.
                 </div>
-                <div class="text-foreground/50 text-xs mt-1">Today at 2:30 PM</div>
+                <div class="text-textMuted text-xs mt-1">Today at 2:30 PM</div>
               </div>
             </div>
           </div>
@@ -85,33 +91,35 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
     </section>
 
     <!-- Stats Section -->
-    <section class="container mx-auto px-4 py-8">
-      <div class="flex flex-wrap justify-center gap-6">
-        <div class="card rounded-sm px-6 py-3 text-center">
-          <div class="text-accent text-sm font-semibold uppercase tracking-wide">
-            Local Inference
+    <section class="py-8">
+      <div class="container">
+        <div class="flex flex-wrap justify-center gap-6">
+          <div class="rounded-md border border-border bg-surface px-6 py-3 text-center shadow-sm">
+            <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+              Local Inference
+            </div>
           </div>
-        </div>
-        <div class="card rounded-sm px-6 py-3 text-center">
-          <div class="text-accent text-sm font-semibold uppercase tracking-wide">
-            No Hosting
+          <div class="rounded-md border border-border bg-surface px-6 py-3 text-center shadow-sm">
+            <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+              No Hosting
+            </div>
           </div>
-        </div>
-        <div class="card rounded-sm px-6 py-3 text-center">
-          <div class="text-accent text-sm font-semibold uppercase tracking-wide">
-            Policy Packs
+          <div class="rounded-md border border-border bg-surface px-6 py-3 text-center shadow-sm">
+            <div class="text-accent text-sm font-semibold uppercase tracking-wide">
+              Policy Packs
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- How It Works Section -->
-    <section id="how-it-works" class="container mx-auto px-4 py-16">
+    <section id="how-it-works" class="section-spacing">
       <div class="max-w-4xl mx-auto">
-        <h2 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+        <h2 class="text-3xl md:text-5xl font-serif font-bold text-center mb-8 tracking-wide text-text">
           A Radically Simple Workflow
         </h2>
-        <p class="text-lg text-center text-foreground/80 mb-16 max-w-2xl mx-auto">
+        <p class="text-lg text-center text-textMuted mb-16 max-w-2xl mx-auto">
           Three steps to get AI-powered moderation running entirely on your machine.
         </p>
 
@@ -123,7 +131,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
                 1. Install
               </h3>
               <CodeBlock client:load>npx greatshield</CodeBlock>
-              <p class="text-sm text-foreground/70 mt-3">
+              <p class="text-sm text-textMuted mt-3">
                 Single command installation. No complex setup, no configuration files.
               </p>
             </div>
@@ -134,10 +142,10 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
               <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-accent">
                 2. Configure
               </h3>
-              <p class="text-sm text-foreground/70 mb-3">
+              <p class="text-sm text-textMuted mb-3">
                 CLI wizard for policy & model; all local
               </p>
-              <div class="text-xs font-mono text-foreground/60 space-y-1">
+              <div class="text-xs font-mono text-textMuted space-y-1">
                 <div>Discord Bot Token: ****</div>
                 <div>Policy Pack: [Balanced]</div>
                 <div>AI Model: [Phi-2 2.7B]</div>
@@ -151,7 +159,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
               <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-accent">
                 3. Protect
               </h3>
-              <p class="text-sm text-foreground/70 mb-3">
+              <p class="text-sm text-textMuted mb-3">
                 Moderation in real time via Discord Gateway
               </p>
               <div class="text-xs text-accent">
@@ -165,66 +173,66 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
 
         <!-- Under the Hood -->
         <div class="max-w-6xl mx-auto">
-          <h3 class="text-2xl md:text-3xl font-bold text-center mb-12 tracking-wide">
+          <h3 class="text-2xl md:text-3xl font-serif font-bold text-center mb-12 tracking-wide text-text">
             Under the Hood
           </h3>
           
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
                 Fast-Pass Filter
               </h4>
-              <p class="text-sm text-foreground/80">
+              <p class="text-sm text-textMuted">
                 Instant regex-based detection for banned words, spam patterns, 
                 and blocked URLs. Catches obvious violations in milliseconds.
               </p>
             </Card>
 
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
                 RAG Retrieval
               </h4>
-              <p class="text-sm text-foreground/80">
+              <p class="text-sm text-textMuted">
                 Contextual policy lookup with recent channel messages. 
                 Provides AI with relevant rules and conversation history.
               </p>
             </Card>
 
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
                 Local AI Analysis
               </h4>
-              <p class="text-sm text-foreground/80">
+              <p class="text-sm text-textMuted">
                 Ollama-powered LLM runs entirely on your hardware. 
                 Analyzes toxicity, harassment, spam, and grooming risk.
               </p>
             </Card>
 
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
                 Smart Actions
               </h4>
-              <p class="text-sm text-foreground/80">
+              <p class="text-sm text-textMuted">
                 Graduated response system: mask minor issues, 
                 delete & warn serious violations, escalate concerning content.
               </p>
             </Card>
 
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
                 Audit Trail
               </h4>
-              <p class="text-sm text-foreground/80">
+              <p class="text-sm text-textMuted">
                 Complete logging to SQLite database and Discord mod-log channel. 
                 Full transparency with AI reasoning included.
               </p>
             </Card>
 
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
                 Appeal System
               </h4>
-              <p class="text-sm text-foreground/80">
+              <p class="text-sm text-textMuted">
                 Built-in slash commands allow users to appeal moderation actions. 
                 Human moderators can review and override AI decisions.
               </p>
@@ -234,47 +242,47 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
 
         <!-- Performance Characteristics -->
         <div class="max-w-4xl mx-auto mt-16">
-          <h3 class="text-2xl md:text-3xl font-bold text-center mb-12 tracking-wide">
+          <h3 class="text-2xl md:text-3xl font-serif font-bold text-center mb-12 tracking-wide text-text">
             Performance Characteristics
           </h3>
           
           <div class="grid md:grid-cols-2 gap-8">
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-4 uppercase tracking-wide text-text">
                 Fast-Pass Response
               </h4>
-              <div class="space-y-2 text-sm">
+              <div class="space-y-2 text-sm text-text">
                 <div class="flex justify-between">
                   <span>Regex Filtering:</span>
-                  <span class="text-accent">< 1ms</span>
+                  <span class="text-accent font-medium">< 1ms</span>
                 </div>
                 <div class="flex justify-between">
                   <span>Spam Detection:</span>
-                  <span class="text-accent">< 5ms</span>
+                  <span class="text-accent font-medium">< 5ms</span>
                 </div>
                 <div class="flex justify-between">
                   <span>URL Checking:</span>
-                  <span class="text-accent">< 10ms</span>
+                  <span class="text-accent font-medium">< 10ms</span>
                 </div>
               </div>
             </Card>
 
             <Card client:load>
-              <h4 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+              <h4 class="text-lg font-semibold mb-4 uppercase tracking-wide text-text">
                 AI Analysis Response
               </h4>
-              <div class="space-y-2 text-sm">
+              <div class="space-y-2 text-sm text-text">
                 <div class="flex justify-between">
                   <span>TinyLLaMA 1.1B:</span>
-                  <span class="text-accent">100-300ms</span>
+                  <span class="text-accent font-medium">100-300ms</span>
                 </div>
                 <div class="flex justify-between">
                   <span>Phi-2 2.7B:</span>
-                  <span class="text-accent">200-500ms</span>
+                  <span class="text-accent font-medium">200-500ms</span>
                 </div>
                 <div class="flex justify-between">
                   <span>Mistral 7B:</span>
-                  <span class="text-accent">500-1500ms</span>
+                  <span class="text-accent font-medium">500-1500ms</span>
                 </div>
               </div>
             </Card>
@@ -284,12 +292,12 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
     </section>
 
     <!-- Models Section -->
-    <section id="models" class="container mx-auto px-4 py-16">
+    <section id="models" class="section-spacing">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+        <h2 class="text-3xl md:text-5xl font-serif font-bold text-center mb-8 tracking-wide text-text">
           Choose a Model That Fits Your Machine
         </h2>
-        <p class="text-lg text-center text-foreground/80 mb-16 max-w-3xl mx-auto">
+        <p class="text-lg text-center text-textMuted mb-16 max-w-3xl mx-auto">
           Greatshield works with multiple AI models via Ollama. Pick the one that matches 
           your hardware capabilities and accuracy requirements.
         </p>
@@ -346,13 +354,13 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
         <!-- System requirements -->
         <div class="grid md:grid-cols-2 gap-8">
           <Card client:load>
-            <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+            <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide text-text">
               System Requirements
             </h3>
             <div class="space-y-4 text-sm">
               <div>
                 <h4 class="font-semibold text-accent mb-2">Minimum:</h4>
-                <ul class="space-y-1 text-foreground/80">
+                <ul class="space-y-1 text-textMuted">
                   <li>• 4GB RAM (2GB available for AI)</li>
                   <li>• Dual-core CPU (2015 or newer)</li>
                   <li>• 10GB free disk space</li>
@@ -362,7 +370,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
               
               <div>
                 <h4 class="font-semibold text-accent mb-2">Recommended:</h4>
-                <ul class="space-y-1 text-foreground/80">
+                <ul class="space-y-1 text-textMuted">
                   <li>• 8GB RAM (4GB available for AI)</li>
                   <li>• Quad-core CPU with AVX2 support</li>
                   <li>• SSD storage for better model loading</li>
@@ -373,13 +381,13 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
           </Card>
 
           <Card client:load>
-            <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+            <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide text-text">
               Performance Tuning
             </h3>
             <div class="space-y-4 text-sm">
               <div>
                 <h4 class="font-semibold text-accent mb-2">Memory Optimization:</h4>
-                <ul class="space-y-1 text-foreground/80">
+                <ul class="space-y-1 text-textMuted">
                   <li>• Close unnecessary applications</li>
                   <li>• Use Q4_K_M quantized models</li>
                   <li>• Consider CPU-only mode for stability</li>
@@ -388,7 +396,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
               
               <div>
                 <h4 class="font-semibold text-accent mb-2">Speed Optimization:</h4>
-                <ul class="space-y-1 text-foreground/80">
+                <ul class="space-y-1 text-textMuted">
                   <li>• Enable GPU acceleration if available</li>
                   <li>• Use smaller models for high-traffic servers</li>
                   <li>• Adjust context length in Ollama settings</li>
@@ -401,12 +409,12 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
     </section>
 
     <!-- Download Section -->
-    <section id="download" class="container mx-auto px-4 py-16">
+    <section id="download" class="section-spacing">
       <div class="max-w-4xl mx-auto">
-        <h2 class="text-3xl md:text-5xl font-bold text-center mb-8 tracking-wide">
+        <h2 class="text-3xl md:text-5xl font-serif font-bold text-center mb-8 tracking-wide text-text">
           Install & Run Locally
         </h2>
-        <p class="text-lg text-center text-foreground/80 mb-16 max-w-2xl mx-auto">
+        <p class="text-lg text-center text-textMuted mb-16 max-w-2xl mx-auto">
           Get Greatshield running on your machine in minutes. No cloud services, 
           no external dependencies, complete privacy.
         </p>
@@ -415,21 +423,21 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
         <div class="mb-16">
           <div class="grid md:grid-cols-2 gap-8">
             <Card client:load>
-              <h3 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+              <h3 class="text-lg font-semibold mb-4 uppercase tracking-wide text-text">
                 Quick Start
               </h3>
               <CodeBlock client:load>npx greatshield</CodeBlock>
-              <p class="text-sm text-foreground/70 mt-3">
+              <p class="text-sm text-textMuted mt-3">
                 This command will download, install, and run the setup wizard. 
                 Perfect for first-time users who want guided configuration.
               </p>
             </Card>
 
             <Card client:load>
-              <h3 class="text-lg font-semibold mb-4 uppercase tracking-wide">
+              <h3 class="text-lg font-semibold mb-4 uppercase tracking-wide text-text">
                 Setup Wizard Flow
               </h3>
-              <div class="font-mono text-xs space-y-1 text-foreground/70">
+              <div class="font-mono text-xs space-y-1 text-textMuted">
                 <div>$ npx greatshield</div>
                 <div class="text-accent">? Discord Bot Token: ****</div>
                 <div class="text-accent">? Guild ID: 123456789012345678</div>
@@ -437,7 +445,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
                 <div class="text-accent">? AI Model: [Phi-2 2.7B - Recommended]</div>
                 <div class="text-accent">? Installing Ollama...</div>
                 <div class="text-accent">? Downloading model...</div>
-                <div>✓ Setup complete! Run 'greatshield start'</div>
+                <div class="text-text">✓ Setup complete! Run 'greatshield start'</div>
               </div>
             </Card>
           </div>
@@ -445,13 +453,13 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
 
         <!-- Requirements -->
         <Card client:load className="mb-8">
-          <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+          <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide text-text">
             Requirements
           </h3>
           <div class="grid md:grid-cols-2 gap-6 text-sm">
             <div>
               <h4 class="font-semibold text-accent mb-2">System:</h4>
-              <ul class="space-y-1 text-foreground/80">
+              <ul class="space-y-1 text-textMuted">
                 <li>• Node.js 20.0+ and npm</li>
                 <li>• 4GB+ RAM (2GB available for AI models)</li>
                 <li>• 10GB+ free disk space (for models and logs)</li>
@@ -460,7 +468,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
             </div>
             <div>
               <h4 class="font-semibold text-accent mb-2">Dependencies:</h4>
-              <ul class="space-y-1 text-foreground/80">
+              <ul class="space-y-1 text-textMuted">
                 <li>• SQLite (bundled automatically)</li>
                 <li>• Ollama (installed during setup)</li>
                 <li>• Discord bot with proper permissions</li>
@@ -475,7 +483,7 @@ import InviteUrlBuilder from '../components/InviteUrlBuilder';
 
         <!-- Post-Installation -->
         <Card client:load className="mt-8">
-          <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide">
+          <h3 class="text-xl font-semibold mb-4 uppercase tracking-wide text-text">
             After Installation
           </h3>
           <div class="grid md:grid-cols-2 gap-6">
@@ -498,9 +506,9 @@ greatshield logs --follow`}
               <h4 class="text-sm font-semibold mb-2 uppercase tracking-wide text-accent">
                 Discord Commands:
               </h4>
-              <div class="text-sm space-y-1 text-foreground/80">
-                <div><code>/guardian status</code> - Check bot health</div>
-                <div><code>/guardian appeal</code> - Appeal moderation actions</div>
+              <div class="text-sm space-y-1 text-textMuted">
+                <div><code class="text-accent">/guardian status</code> - Check bot health</div>
+                <div><code class="text-accent">/guardian appeal</code> - Appeal moderation actions</div>
                 <div>Automatic moderation runs in background</div>
                 <div>Check your mod-log channel for activity</div>
               </div>
@@ -511,38 +519,38 @@ greatshield logs --follow`}
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="container mx-auto px-4 py-16">
+    <section id="features" class="section-spacing">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl md:text-3xl font-bold text-center mb-12 tracking-wide">
+        <h2 class="text-2xl md:text-3xl font-serif font-bold text-center mb-12 tracking-wide text-text">
           Privacy-First Moderation
         </h2>
         
         <div class="grid md:grid-cols-3 gap-8">
           <Card client:load>
-            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
               100% Local Processing
             </h3>
-            <p class="text-foreground/80 text-sm">
+            <p class="text-textMuted text-sm">
               All AI analysis happens on your machine. No external API calls, 
               no data leaving your network, complete privacy control.
             </p>
           </Card>
 
           <Card client:load>
-            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
               Two-Pass Moderation
             </h3>
-            <p class="text-foreground/80 text-sm">
+            <p class="text-textMuted text-sm">
               Fast regex filtering catches obvious violations instantly, 
               while local AI provides nuanced analysis for edge cases.
             </p>
           </Card>
 
           <Card client:load>
-            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide">
+            <h3 class="text-lg font-semibold mb-3 uppercase tracking-wide text-text">
               Configurable Policies
             </h3>
-            <p class="text-foreground/80 text-sm">
+            <p class="text-textMuted text-sm">
               Choose from Strict, Balanced, or Lenient policy packs. 
               Customize thresholds and actions to fit your community.
             </p>
@@ -556,7 +564,7 @@ greatshield logs --follow`}
       <a 
         href="#hero" 
         id="back-to-top"
-        class="btn-secondary rounded-full p-3 opacity-0 transition-opacity duration-300 hover:bg-accent hover:text-background"
+        class="btn-secondary rounded-full p-3 opacity-0 transition-all duration-300 hover:bg-accent hover:text-bg shadow-lg"
         aria-label="Back to top"
       >
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { Button } from './ui/button';
+import { cn } from '../lib/utils';
 
 interface CodeBlockProps {
   children: string;
   language?: string;
   copyable?: boolean;
+  className?: string;
 }
 
-export function CodeBlock({ children, language = '', copyable = true }: CodeBlockProps) {
+export function CodeBlock({ children, language = '', copyable = true, className }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -20,18 +23,20 @@ export function CodeBlock({ children, language = '', copyable = true }: CodeBloc
   };
 
   return (
-    <div className="relative card rounded-sm p-0 overflow-hidden">
-      <pre className={`p-4 overflow-x-auto text-sm ${language ? `language-${language}` : ''}`}>
-        <code className="font-mono">{children}</code>
+    <div className={cn("relative bg-muted rounded-lg overflow-hidden", className)}>
+      <pre className="p-4 overflow-x-auto text-sm bg-muted">
+        <code className="font-mono text-text">{children}</code>
       </pre>
       {copyable && (
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={handleCopy}
-          className="absolute top-2 right-2 px-2 py-1 text-xs border border-border hover:border-border-hover bg-background/80 transition-colors rounded-sm focus:outline-none focus:ring-1 focus:ring-accent"
+          className="absolute top-2 right-2 text-xs h-7 px-2"
           aria-label="Copy code"
         >
-          {copied ? 'COPIED' : 'COPY'}
-        </button>
+          {copied ? 'Copied!' : 'Copy'}
+        </Button>
       )}
     </div>
   );

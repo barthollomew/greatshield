@@ -4,39 +4,39 @@ const version = "v1.0.0";
 const commitHash = "abc1234";
 ---
 
-<footer class="border-t border-border mt-16">
-  <div class="container mx-auto px-4 py-8">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-foreground/70">
-      <div class="flex items-center gap-8">
+<footer class="border-t border-border bg-surface">
+  <div class="container section-spacing">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-textMuted">
+      <div class="flex items-center gap-6">
         <span>© 2025 Greatshield</span>
         <a href="/privacy" class="hover:text-accent transition-colors">Privacy</a>
         <a href="/terms" class="hover:text-accent transition-colors">Terms</a>
       </div>
       
-      <div class="text-center">
-        {version} • {commitHash}
+      <div class="flex items-center gap-6">
+        <span class="text-xs">{version} • {commitHash}</span>
+        <a 
+          href="https://github.com/greatshield/greatshield" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="hover:text-accent transition-colors"
+          aria-label="View Greatshield on GitHub"
+        >
+          GitHub
+        </a>
       </div>
-      
-      <a 
-        href="https://github.com/greatshield/greatshield" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        class="hover:text-accent transition-colors"
-      >
-        GitHub
-      </a>
     </div>
     
     <!-- Pixel fireplace -->
     <div class="flex justify-center mt-8">
-      <div class="card rounded-sm p-4 text-center">
+      <div class="card p-6 text-center">
         <img 
           src="/pixel-fireplace.gif" 
           alt="Animated pixel fireplace" 
-          class="w-16 h-12 mx-auto mb-2 pixelated"
+          class="w-16 h-12 mx-auto mb-3 pixelated"
           style="image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges;"
         />
-        <div class="text-xs text-foreground/50 uppercase tracking-wide">
+        <div class="text-xs text-textMuted font-medium tracking-wide">
           Bonfire Kindled
         </div>
       </div>

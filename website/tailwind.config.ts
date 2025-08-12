@@ -1,40 +1,92 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
-const config: Config = {
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+export default {
+  content: [
+    './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
+    './public/**/*.{html,js}',
+  ],
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: '#0b0b0e',
-        foreground: '#e7e7ea',
-        accent: '#c6a267',
-        border: 'rgba(230, 220, 200, 0.25)',
-        'border-hover': 'rgba(230, 220, 200, 0.4)',
+        bg: 'var(--bg)',
+        surface: 'var(--surface)',
+        muted: 'var(--muted)',
+        text: 'var(--text)',
+        textMuted: 'var(--text-muted)',
+        border: 'var(--border)',
+        accent: 'var(--accent)',
+        accentHover: 'var(--accent-hover)',
+        accentSoft: 'var(--accent-soft)',
+        // shadcn/ui compatibility
+        background: 'var(--surface)',
+        foreground: 'var(--text)',
+        primary: {
+          DEFAULT: 'var(--accent)',
+          foreground: '#FFFFFF',
+        },
+        secondary: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--text)',
+        },
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--text-muted)',
+        },
+        card: {
+          DEFAULT: 'var(--surface)',
+          foreground: 'var(--text)',
+        },
+        ring: 'var(--accent)',
+        input: 'var(--surface)',
+      },
+      borderRadius: {
+        lg: 'var(--radius-lg)',
+        md: 'var(--radius-md)',
+        sm: 'var(--radius-sm)',
+      },
+      boxShadow: {
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
       },
       fontFamily: {
-        mono: [
-          'JetBrains Mono',
-          'Fira Code',
-          'IBM Plex Mono',
-          'ui-monospace',
-          'SFMono-Regular',
-          'Monaco',
-          'Consolas',
-          'Liberation Mono',
-          'Courier New',
-          'monospace'
-        ],
+        serif: ['"Playfair Display"', 'serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
-      letterSpacing: {
-        'wide': '0.1em',
+      fontSize: {
+        'display': ['44px', { lineHeight: '52px', letterSpacing: '-0.01em' }],
+        'h1': ['36px', { lineHeight: '44px', letterSpacing: '-0.01em' }],
+        'h2': ['28px', { lineHeight: '36px', letterSpacing: '-0.01em' }],
+        'body': ['16px', { lineHeight: '24px' }],
+        'small': ['14px', { lineHeight: '22px' }],
       },
-      backgroundImage: {
-        'grain': 'url("data:image/svg+xml,%3Csvg width="200" height="200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="grain"%3E%3CfeTurbulence baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23grain)" opacity="0.025"/%3E%3C/svg%3E")',
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'slide-in': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'fade-in': 'fade-in 0.5s ease-out',
+        'slide-in': 'slide-in 0.3s ease-out',
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },
-  plugins: [],
-}
-
-export default config
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
+} satisfies Config;

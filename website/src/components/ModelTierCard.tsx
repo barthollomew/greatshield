@@ -1,6 +1,8 @@
 import React from 'react';
-import Card from './Card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './ui/card';
+import { Badge } from './ui/badge';
 import CodeBlock from './CodeBlock';
+import { cn } from '../lib/utils';
 
 interface ModelTierCardProps {
   title: string;
@@ -22,48 +24,61 @@ export function ModelTierCard({
   recommended = false 
 }: ModelTierCardProps) {
   return (
-    <Card className={`h-full ${recommended ? 'border-accent' : ''}`}>
-      <div className="flex flex-col h-full">
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-1">
-            {title}
-            {recommended && (
-              <span className="ml-2 text-xs text-accent font-normal uppercase tracking-wide">
-                Recommended
-              </span>
-            )}
-          </h3>
-          <p className="text-foreground/70 text-sm">{subtitle}</p>
-        </div>
-        
-        <div className="space-y-2 mb-4 flex-1">
-          <div className="text-sm">
-            <span className="text-accent">RAM:</span> {ramUsage}
+    <Card className={cn(
+      'h-full transition-all duration-200',
+      recommended && 'ring-2 ring-accent ring-offset-2 shadow-lg'
+    )}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between text-lg">
+          <span>{title}</span>
+          {recommended && (
+            <Badge variant="default" className="ml-2">
+              Recommended
+            </Badge>
+          )}
+        </CardTitle>
+        <CardDescription className="text-textMuted">
+          {subtitle}
+        </CardDescription>
+      </CardHeader>
+      
+      <CardContent className="flex-1 space-y-4">
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="font-medium text-accent">RAM:</span>
+            <span className="ml-2 text-text">{ramUsage}</span>
           </div>
           {latency && (
-            <div className="text-sm">
-              <span className="text-accent">Latency:</span> {latency}
+            <div>
+              <span className="font-medium text-accent">Latency:</span>
+              <span className="ml-2 text-text">{latency}</span>
             </div>
           )}
-          
-          <ul className="text-sm space-y-1 mt-3">
+        </div>
+        
+        <div>
+          <h4 className="font-medium text-text mb-2">Features:</h4>
+          <ul className="text-sm text-textMuted space-y-1">
             {features.map((feature, index) => (
-              <li key={index} className="text-foreground/80">
-                • {feature}
+              <li key={index} className="flex items-start">
+                <span className="text-accent mr-2">•</span>
+                <span>{feature}</span>
               </li>
             ))}
           </ul>
         </div>
-        
-        <div className="mt-auto">
-          <div className="text-xs text-foreground/60 mb-2 uppercase tracking-wide">
+      </CardContent>
+      
+      <CardFooter className="pt-0">
+        <div className="w-full">
+          <p className="text-xs font-medium text-textMuted mb-2 uppercase tracking-wide">
             Use with Ollama:
-          </div>
+          </p>
           <CodeBlock copyable={true}>
             {`ollama pull ${modelName}`}
           </CodeBlock>
         </div>
-      </div>
+      </CardFooter>
     </Card>
   );
 }

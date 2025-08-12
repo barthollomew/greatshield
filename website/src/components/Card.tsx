@@ -1,4 +1,6 @@
 import React from 'react';
+import { Card as ShadcnCard } from './ui/card';
+import { cn } from '../lib/utils';
 
 interface CardProps {
   children: React.ReactNode;
@@ -8,15 +10,15 @@ interface CardProps {
 
 export function Card({ children, className = '', hover = true }: CardProps) {
   return (
-    <div 
-      className={`
-        card rounded-sm p-6
-        ${hover ? 'hover:border-border-hover' : ''}
-        ${className}
-      `}
+    <ShadcnCard 
+      className={cn(
+        'p-6 transition-colors duration-200',
+        hover && 'hover:shadow-md',
+        className
+      )}
     >
       {children}
-    </div>
+    </ShadcnCard>
   );
 }
 

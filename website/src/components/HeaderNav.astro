@@ -2,50 +2,54 @@
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="border-b border-border">
-  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <!-- Globe-like glyph -->
-      <svg class="glyph" viewBox="0 0 16 16" fill="currentColor">
-        <circle cx="8" cy="8" r="6" stroke="currentColor" fill="none" stroke-width="1"/>
-        <path d="M2 8h12M8 2a6 6 0 0 0 0 12M8 2a6 6 0 0 1 0 12" stroke="currentColor" fill="none" stroke-width="1"/>
-      </svg>
-      <a href="/" class="text-lg font-semibold tracking-wide hover:text-accent transition-colors">
-        GREATSHIELD
+<header class="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/60">
+  <div class="container">
+    <div class="flex h-16 items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Greatshield Logo -->
+        <img 
+          src="/logo.svg" 
+          alt="Greatshield Logo" 
+          class="w-10 h-10 object-contain"
+        />
+        <a href="/" class="text-xl font-serif font-bold text-text hover:text-accent transition-colors">
+          Greatshield
+        </a>
+      </div>
+      
+      <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+        <a 
+          href="#how-it-works" 
+          class="nav-link"
+          data-section="how-it-works"
+        >
+          How It Works
+        </a>
+        <a 
+          href="#models" 
+          class="nav-link"
+          data-section="models"
+        >
+          Models
+        </a>
+        <a 
+          href="#download" 
+          class="nav-link"
+          data-section="download"
+        >
+          Download
+        </a>
+      </nav>
+      
+      <a 
+        href="https://github.com/greatshield/greatshield" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="btn-secondary text-sm"
+        aria-label="View Greatshield on GitHub"
+      >
+        GitHub
       </a>
     </div>
-    
-    <nav class="hidden md:flex items-center gap-6 text-sm">
-      <a 
-        href="#how-it-works" 
-        class="nav-link hover:text-accent transition-colors"
-        data-section="how-it-works"
-      >
-        How It Works
-      </a>
-      <a 
-        href="#models" 
-        class="nav-link hover:text-accent transition-colors"
-        data-section="models"
-      >
-        Models
-      </a>
-      <a 
-        href="#download" 
-        class="nav-link hover:text-accent transition-colors"
-        data-section="download"
-      >
-        Download
-      </a>
-    </nav>
-    
-    <a 
-      href="https://github.com/greatshield/greatshield" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="btn-secondary rounded-sm text-xs"
-    >
-      GitHub
-    </a>
   </div>
 </header>
