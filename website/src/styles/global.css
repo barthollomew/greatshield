@@ -108,23 +108,23 @@
   }
   
   .section-spacing {
-    @apply py-20 sm:py-24 lg:py-32;
+    @apply py-24 sm:py-32 lg:py-40;
   }
   
   .section-spacing-sm {
-    @apply py-12 sm:py-16 lg:py-20;
+    @apply py-16 sm:py-20 lg:py-24;
   }
   
   .content-spacing {
-    @apply space-y-12 sm:space-y-16 lg:space-y-20;
+    @apply space-y-16 sm:space-y-20 lg:space-y-24;
   }
   
   .element-spacing {
-    @apply space-y-8 sm:space-y-10 lg:space-y-12;
+    @apply space-y-10 sm:space-y-12 lg:space-y-16;
   }
   
   .text-spacing {
-    @apply space-y-4 sm:space-y-6;
+    @apply space-y-6 sm:space-y-8;
   }
   
   /* Button styles with proper spacing */
