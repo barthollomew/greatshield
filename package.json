@@ -19,7 +19,9 @@
     "package:linux": "pkg . --targets node20-linux-x64 --output dist/greatshield-linux",
     "package:all": "npm run package:win && npm run package:mac && npm run package:linux",
     "dev:landing": "cd website && npm run dev",
-    "build:landing": "cd website && npm run build"
+    "build:landing": "cd website && npm run build",
+    "api": "ts-node bot/src/index.ts serve",
+    "dashboard": "cd dashboard && npm start"
   },
   "keywords": [
     "discord",

@@ -11,6 +11,7 @@ import { GreatshieldBot } from './core/GreatshieldBot';
 import { SetupWizard } from './cli/SetupWizard';
 import { Logger } from './utils/Logger';
 import { createContainer, TOKENS } from './core/DIContainer';
+import { ApiServer } from './server/ApiServer';
 
 dotenv.config();
 
@@ -195,13 +196,46 @@ program
         process.on('SIGTERM', () => shutdown('SIGTERM'));
         process.on('SIGINT', () => shutdown('SIGINT'));
 
-        await bot.start(token);
-        started = true;
-      } finally {
-        if (!started) {
-          await db.close();
-        }
+      await bot.start(token);
+      started = true;
+    } finally {
+      if (!started) {
+        await db.close();
       }
+    }
+  })
+);
+
+program
+  .command('serve')
+  .description('Start the REST API for the Greatshield dashboard')
+  .option('-p, --port <number>', 'Port to listen on', process.env['PORT'] || '4000')
+  .action(
+    withAction('API server', async (options: { port?: string }) => {
+      banner('API server');
+
+      const portNumber = Number(options.port || process.env['PORT'] || '4000');
+      if (Number.isNaN(portNumber)) {
+        throw new Error('Port must be a number.');
+      }
+
+      const db = new DatabaseManager(process.env['DATABASE_PATH']);
+      await db.initialize();
+      const ollama = new OllamaManager(process.env['OLLAMA_HOST']);
+      const api = new ApiServer(db, ollama, logger, portNumber);
+      await api.start();
+
+      console.log(chalk.green(`REST API available at http://localhost:${portNumber}/api`));
+
+      const shutdown = async (signal: string) => {
+        console.log(chalk.yellow(`\nReceived ${signal}, shutting down API...`));
+        await api.stop();
+        await db.close();
+        process.exit(0);
+      };
+
+      process.on('SIGINT', () => shutdown('SIGINT'));
+      process.on('SIGTERM', () => shutdown('SIGTERM'));
     })
   );
 

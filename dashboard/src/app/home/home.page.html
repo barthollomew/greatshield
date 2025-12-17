@@ -1,0 +1,189 @@
+<ion-content [fullscreen]="true" class="dashboard">
+  <div class="backdrop"></div>
+
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" refreshingSpinner="dots">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <section class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow">Local-first control room</p>
+      <h1>Greatshield Moderator</h1>
+      <p class="lede">
+        Inspect live health, tune models, and adjust policy packs without touching the CLI.
+        All calls stay on your machine.
+      </p>
+      <div class="hero__cta">
+        <ion-button color="tertiary" (click)="loadDashboard()" [disabled]="loading">
+          {{ loading ? 'Refreshing...' : 'Refresh data' }}
+        </ion-button>
+        <ion-button fill="clear" color="light" href="https://github.com/barthollomew/greatshield" target="_blank">
+          View repo
+        </ion-button>
+      </div>
+      <div class="hero__tags">
+        <ion-chip color="success">Local AI</ion-chip>
+        <ion-chip color="primary">Discord-first</ion-chip>
+        <ion-chip color="medium">SQLite</ion-chip>
+      </div>
+    </div>
+
+    <ion-card class="hero__card glass">
+      <ion-card-header>
+        <ion-card-subtitle>Live snapshot</ion-card-subtitle>
+        <ion-card-title>Status Signals</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="signal">
+          <div>
+            <p>Database</p>
+            <small>SQLite + cache</small>
+          </div>
+          <ion-badge [color]="badgeColor(health?.database.connected)">Connected</ion-badge>
+        </div>
+        <div class="signal">
+          <div>
+            <p>Ollama</p>
+            <small>{{ health?.ollama.modelsAvailable || 0 }} models detected</small>
+          </div>
+          <ion-badge [color]="badgeColor(health?.ollama.running)">
+            {{ health?.ollama.running ? 'Running' : 'Offline' }}
+          </ion-badge>
+        </div>
+        <div class="signal">
+          <div>
+            <p>Config</p>
+            <small>Guild {{ config?.guild_id || 'unknown' }}</small>
+          </div>
+          <ion-badge [color]="badgeColor(!!config)">Loaded</ion-badge>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+  <section class="panels">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeMd="6">
+          <ion-card class="glass">
+            <ion-card-header>
+              <ion-card-subtitle>Observability</ion-card-subtitle>
+              <ion-card-title>System health</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+              <div class="status-row">
+                <div>
+                  <p>Database</p>
+                  <small>SQLite backend</small>
+                </div>
+                <ion-chip [color]="badgeColor(health?.database.connected)">{{ health?.database.connected ? 'Online' : 'Offline' }}</ion-chip>
+              </div>
+              <div class="status-row">
+                <div>
+                  <p>Ollama</p>
+                  <small>{{ health?.ollama.modelsAvailable || 0 }} models accessible</small>
+                </div>
+                <ion-chip [color]="badgeColor(health?.ollama.running)">{{ health?.ollama.running ? 'Running' : 'Offline' }}</ion-chip>
+              </div>
+              <div class="status-row">
+                <div>
+                  <p>Configuration</p>
+                  <small>Guild {{ config?.guild_id || 'not set' }}</small>
+                </div>
+                <ion-chip [color]="badgeColor(!!config)">Loaded</ion-chip>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" sizeMd="6">
+          <ion-card class="glass">
+            <ion-card-header>
+              <ion-card-subtitle>Models</ion-card-subtitle>
+              <ion-card-title>Installed Ollama models</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="chip-grid" *ngIf="models.length; else noModels">
+                <ion-chip *ngFor="let model of models" color="primary" [outline]="selectedModel !== model">
+                  {{ model }}
+                </ion-chip>
+              </div>
+              <ng-template #noModels>
+                <p class="muted">No models reported by the API yet.</p>
+              </ng-template>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" sizeMd="6">
+          <ion-card class="glass">
+            <ion-card-header>
+              <ion-card-subtitle>Policy Packs</ion-card-subtitle>
+              <ion-card-title>Moderation stance</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list lines="none">
+                <ion-item *ngFor="let pack of policyPacks">
+                  <ion-label>
+                    <h3>{{ pack.name }}</h3>
+                    <p>{{ pack.description || 'No description provided' }}</p>
+                  </ion-label>
+                  <ion-badge [color]="pack.is_active ? 'success' : 'medium'">
+                    {{ pack.is_active ? 'Active' : 'Available' }}
+                  </ion-badge>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" sizeMd="6">
+          <ion-card class="glass">
+            <ion-card-header>
+              <ion-card-subtitle>Configuration</ion-card-subtitle>
+              <ion-card-title>Live tuning</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item lines="full">
+                <ion-label position="stacked">Guild ID</ion-label>
+                <ion-input [(ngModel)]="guildId" placeholder="Discord guild snowflake"></ion-input>
+              </ion-item>
+
+              <ion-item lines="full">
+                <ion-label position="stacked">Mod log channel</ion-label>
+                <ion-input [(ngModel)]="modLogChannelId" placeholder="Channel snowflake"></ion-input>
+              </ion-item>
+
+              <ion-item lines="full">
+                <ion-label position="stacked">Selected model</ion-label>
+                <ion-select interface="popover" [(ngModel)]="selectedModel" placeholder="Choose a model">
+                  <ion-select-option *ngFor="let model of models" [value]="model">{{ model }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Active policy pack</ion-label>
+                <ion-select interface="popover" [(ngModel)]="selectedPolicy" placeholder="Select policy">
+                  <ion-select-option *ngFor="let pack of policyPacks" [value]="pack.id">
+                    {{ pack.name }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <div class="form-actions">
+                <ion-button color="tertiary" expand="block" (click)="saveConfig()" [disabled]="saving || loading">
+                  {{ saving ? 'Saving...' : 'Save configuration' }}
+                </ion-button>
+              </div>
+              <p class="muted">Changes are persisted directly to the bot database.</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+</ion-content>

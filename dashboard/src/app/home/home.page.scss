@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:host {
+  --ion-font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+}
+
+.dashboard {
+  --background: transparent;
+  position: relative;
+  color: #e8e8ec;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.3), transparent 30%),
+    radial-gradient(circle at 80% 10%, rgba(16, 185, 129, 0.28), transparent 28%),
+    linear-gradient(135deg, #0b0c14 0%, #0f111d 50%, #090a12 100%);
+  filter: blur(32px);
+  z-index: 0;
+}
+
+section {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  padding: 32px 22px 10px;
+  align-items: center;
+}
+
+.hero__copy h1 {
+  font-size: 2.4rem;
+  margin: 8px 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.hero__copy .lede {
+  color: #c6c6cf;
+  max-width: 720px;
+}
+
+.hero__cta {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.hero__tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.hero__card {
+  backdrop-filter: blur(10px);
+}
+
+.glass {
+  background: rgba(20, 22, 35, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  border-radius: 16px;
+}
+
+.signal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.signal:last-child {
+  border-bottom: none;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  color: #8fb3ff;
+}
+
+.panels {
+  padding: 10px 12px 28px;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.status-row:last-child {
+  border-bottom: none;
+}
+
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.form-actions {
+  margin: 14px 0 6px;
+}
+
+.muted {
+  color: #9ea3b5;
+  margin-top: 4px;
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  margin-bottom: 10px;
+}
+
+ion-card-title,
+ion-card-subtitle,
+ion-label,
+ion-input,
+ion-select {
+  color: #f0f3ff;
+}
+
+ion-select::part(placeholder) {
+  color: #c6c6cf;
+}
+
+ion-item {
+  --background: transparent;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}

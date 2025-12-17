@@ -297,11 +297,24 @@ export class DatabaseManager implements IDatabaseManager {
       throw new Error('Database not initialized. Call initialize() first.');
     }
     
+      try {
+        const stmt = this.db.prepare('SELECT * FROM bot_config WHERE guild_id = ? LIMIT 1');
+        return (stmt.get(guildId) as BotConfig) || null;
+      } catch (error) {
+        throw new Error(`Failed to get bot config: ${error}`);
+      }
+    }
+
+  async getFirstBotConfig(): Promise<BotConfig | null> {
+    if (!this.db) {
+      throw new Error('Database not initialized. Call initialize() first.');
+    }
+
     try {
-      const stmt = this.db.prepare('SELECT * FROM bot_config WHERE guild_id = ? LIMIT 1');
-      return (stmt.get(guildId) as BotConfig) || null;
+      const stmt = this.db.prepare('SELECT * FROM bot_config ORDER BY updated_at DESC LIMIT 1');
+      return (stmt.get() as BotConfig) || null;
     } catch (error) {
-      throw new Error(`Failed to get bot config: ${error}`);
+      throw new Error(`Failed to get default bot config: ${error}`);
     }
   }
 
