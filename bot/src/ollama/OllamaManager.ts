@@ -111,7 +111,7 @@ export class OllamaManager {
   async installOllama(): Promise<void> {
     const platform = os.platform();
     
-    console.log(chalk.blue('🔄 Installing Ollama...'));
+    console.log(chalk.blue('Installing Ollama...'));
     
     try {
       switch (platform) {
@@ -228,7 +228,7 @@ export class OllamaManager {
 
   private async startOllamaService(): Promise<void> {
     try {
-      console.log(chalk.blue('🚀 Starting Ollama service...'));
+      console.log(chalk.blue('Starting Ollama service...'));
       
       const platform = os.platform();
       
@@ -253,7 +253,7 @@ export class OllamaManager {
       await this.checkConnection();
       
     } catch (error) {
-      console.log(chalk.yellow('⚠️  Could not start Ollama service automatically. Please start it manually: ollama serve'));
+      console.log(chalk.yellow('Could not start Ollama service automatically. Please start it manually: ollama serve'));
     }
   }
 
@@ -282,7 +282,7 @@ export class OllamaManager {
 
   async pullModel(modelName: string): Promise<void> {
     try {
-      console.log(chalk.blue(`📥 Downloading model: ${modelName}`));
+      console.log(chalk.blue(`Downloading model: ${modelName}`));
       
       // Use streaming to show progress
       const response = await axios.post(
@@ -313,7 +313,7 @@ export class OllamaManager {
               }
               
               if (data.status === 'success') {
-                console.log(chalk.green(`✅ Model ${modelName} downloaded successfully`));
+                console.log(chalk.green(`Model ${modelName} downloaded successfully`));
               }
             } catch {
               // Ignore JSON parse errors

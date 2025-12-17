@@ -55,10 +55,10 @@ export class GreatshieldBot {
       userCount: this.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)
     });
 
-    console.log(`✅ Greatshield is online as ${this.client.user.username}#${this.client.user.discriminator}`);
+    console.log(`Greatshield is online as ${this.client.user.username}#${this.client.user.discriminator}`);
 
     // Configuration is already loaded via constructor
-    console.log(`📋 Using configuration for guild: ${this.client.guilds.cache.get(this.config.guild_id)?.name || this.config.guild_id}`);
+    console.log(`Using configuration for guild: ${this.client.guilds.cache.get(this.config.guild_id)?.name || this.config.guild_id}`);
 
     // Initialize moderation pipeline
     await this.moderationPipeline.initialize(this.config);

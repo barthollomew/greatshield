@@ -177,10 +177,10 @@ export class DiscordEventHandler implements IDiscordEventHandler {
       const activePolicyPack = await this.db.getActivePolicyPack();
 
       const embed = new EmbedBuilder()
-        .setTitle('🛡️ Greatshield Status')
+        .setTitle('Greatshield Status')
         .setColor(0x00ff00)
         .addFields(
-          { name: 'Status', value: '✅ Online', inline: true },
+          { name: 'Status', value: 'Online', inline: true },
           { name: 'Active Policy', value: activePolicyPack?.name || 'None', inline: true },
           { name: 'AI Model', value: config?.selected_model || 'Not configured', inline: true }
         )
@@ -197,14 +197,14 @@ export class DiscordEventHandler implements IDiscordEventHandler {
       const policyPacks = await this.db.getPolicyPacks();
 
       const embed = new EmbedBuilder()
-        .setTitle('📋 Policy Packs')
+        .setTitle('Policy Packs')
         .setColor(0x0099ff);
 
       if (policyPacks.length === 0) {
         embed.setDescription('No policy packs found.');
       } else {
         const description = policyPacks.map(pack => 
-          `${pack.is_active ? '✅' : '⚪'} **${pack.name}**\n${pack.description || 'No description'}`
+          `${pack.is_active ? '[active]' : '[inactive]'} **${pack.name}**\n${pack.description || 'No description'}`
         ).join('\n\n');
         
         embed.setDescription(description);

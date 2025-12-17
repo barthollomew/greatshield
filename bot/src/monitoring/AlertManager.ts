@@ -504,10 +504,10 @@ export class AlertManager {
    */
   private sendConsoleAlert(alert: Alert): void {
     const levelEmoji = {
-      info: 'ℹ️',
-      warning: '⚠️',
-      error: '❌',
-      critical: '🚨'
+      info: '[info]',
+      warning: '[warn]',
+      error: '[error]',
+      critical: '[critical]'
     };
 
     const message = `${levelEmoji[alert.level]} [${alert.level.toUpperCase()}] ${alert.title}: ${alert.message}`;

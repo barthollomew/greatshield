@@ -67,16 +67,16 @@ export class ModerationActions {
       await message.delete();
 
       const embed = new EmbedBuilder()
-        .setTitle('🛡️ Content Masked')
+        .setTitle('Content Masked')
         .setDescription(`A message from <@${message.author.id}> was automatically masked`)
         .addFields([
           {
-            name: '📝 Original Content (Masked)',
+            name: 'Original Content (Masked)',
             value: maskedContent,
             inline: false
           },
           {
-            name: '🤖 Reason',
+            name: 'Reason',
             value: reason,
             inline: false
           }
@@ -117,16 +117,16 @@ export class ModerationActions {
 
       // Send warning to the channel
       const warningEmbed = new EmbedBuilder()
-        .setTitle('⚠️ Message Deleted')
+        .setTitle('Message Deleted')
         .setDescription(`<@${user.id}>, your message was removed for violating community guidelines.`)
         .addFields([
           {
-            name: '🤖 Reason',
+            name: 'Reason',
             value: reason,
             inline: false
           },
           {
-            name: '📖 Guidelines',
+            name: 'Guidelines',
             value: 'Please review the server rules to avoid future violations.',
             inline: false
           }
@@ -145,23 +145,23 @@ export class ModerationActions {
       // Try to send a DM to the user
       try {
         const dmEmbed = new EmbedBuilder()
-          .setTitle('📨 Message Removed - Greatshield')
+          .setTitle('Message Removed - Greatshield')
           .setDescription(`Your message in #${(channel as TextChannel).name} was removed.`)
           .addFields([
             {
-              name: '💭 Original Message',
+              name: 'Original Message',
               value: message.content.length > 1000 
                 ? message.content.substring(0, 1000) + '...'
                 : message.content,
               inline: false
             },
             {
-              name: '🤖 Reason',
+              name: 'Reason',
               value: reason,
               inline: false
             },
             {
-              name: '❓ Questions?',
+              name: 'Questions?',
               value: 'Contact the server moderators if you believe this was a mistake.',
               inline: false
             }
@@ -234,16 +234,16 @@ export class ModerationActions {
 
       // Log the action
       new EmbedBuilder()
-        .setTitle('👻 User Shadowbanned')
+        .setTitle('User Shadowbanned')
         .setDescription(`<@${message.author.id}> has been automatically shadowbanned.`)
         .addFields([
           {
-            name: '🤖 Reason',
+            name: 'Reason',
             value: reason,
             inline: false
           },
           {
-            name: '⏱️ Duration',
+            name: 'Duration',
             value: 'Until manually reviewed by moderators',
             inline: false
           }
@@ -290,33 +290,33 @@ export class ModerationActions {
 
       // Create high-priority alert embed
       const alertEmbed = new EmbedBuilder()
-        .setTitle('🚨 HIGH PRIORITY: Moderation Escalation')
+        .setTitle('HIGH PRIORITY: Moderation Escalation')
         .setDescription('A message requires immediate moderator attention.')
         .addFields([
           {
-            name: '👤 User',
+            name: 'User',
             value: `<@${message.author.id}> (${message.author.tag})`,
             inline: true
           },
           {
-            name: '📍 Channel',
+            name: 'Channel',
             value: `<#${message.channelId}>`,
             inline: true
           },
           {
-            name: '🔗 Message Link',
+            name: 'Message Link',
             value: `[Jump to Message](https://discord.com/channels/${guild.id}/${message.channelId}/${message.id})`,
             inline: true
           },
           {
-            name: '💭 Message Content',
+            name: 'Message Content',
             value: message.content.length > 1000 
               ? message.content.substring(0, 1000) + '...'
               : message.content,
             inline: false
           },
           {
-            name: '🤖 AI Analysis',
+            name: 'AI Analysis',
             value: reason,
             inline: false
           }
@@ -327,7 +327,7 @@ export class ModerationActions {
       if (confidence !== undefined) {
         alertEmbed.addFields([
           {
-            name: '📊 Confidence',
+            name: 'Confidence',
             value: `${(confidence * 100).toFixed(1)}%`,
             inline: true
           }

@@ -364,7 +364,7 @@ export class RateLimiter {
       switch (penaltyLevel) {
         case 'warning':
           // Send a warning message (could be DM or channel)
-          await message.reply('⚠️ You are sending messages too quickly. Please slow down.');
+          await message.reply('You are sending messages too quickly. Please slow down.');
           break;
           
         case 'temp_mute':

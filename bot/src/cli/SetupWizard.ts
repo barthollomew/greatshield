@@ -1,9 +1,9 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { DatabaseManager, BotConfig } from '../database/DatabaseManager';
-import { OllamaManager } from '../ollama/OllamaManager';
 import fs from 'fs';
 import path from 'path';
+import { BotConfig, DatabaseManager } from '../database/DatabaseManager';
+import { OllamaManager } from '../ollama/OllamaManager';
 
 export interface WizardConfig {
   discordToken: string;
@@ -17,35 +17,24 @@ export interface WizardConfig {
 }
 
 export class SetupWizard {
-  private db: DatabaseManager;
-  private ollama: OllamaManager;
-
-  constructor(db: DatabaseManager, ollama: OllamaManager) {
-    this.db = db;
-    this.ollama = ollama;
-  }
+  constructor(private db: DatabaseManager, private ollama: OllamaManager) {}
 
   async run(): Promise<WizardConfig> {
-    console.log(chalk.blue.bold('\n🛡️  Welcome to Greatshield Setup Wizard\n'));
+    console.log(chalk.blue.bold('\nGreatshield Setup Wizard\n'));
     console.log(chalk.gray('This wizard will help you configure your Discord moderation bot.\n'));
 
-    // Step 1: Discord Configuration
     console.log(chalk.yellow.bold('Step 1: Discord Bot Configuration'));
     const discordConfig = await this.collectDiscordConfig();
 
-    // Step 2: Policy Pack Selection
     console.log(chalk.yellow.bold('\nStep 2: Moderation Policy Selection'));
     const policyPackId = await this.selectPolicyPack();
 
-    // Step 3: AI Model Selection
     console.log(chalk.yellow.bold('\nStep 3: AI Model Configuration'));
     const modelConfig = await this.selectAIModel();
 
-    // Step 4: Channel Configuration
     console.log(chalk.yellow.bold('\nStep 4: Channel Configuration'));
     const channelConfig = await this.collectChannelConfig();
 
-    // Compile final configuration
     const config: WizardConfig = {
       ...discordConfig,
       ...channelConfig,
@@ -53,16 +42,20 @@ export class SetupWizard {
       policyPackId
     };
 
-    // Step 5: Save Configuration
     await this.saveConfiguration(config);
 
-    console.log(chalk.green.bold('\n✅ Setup completed successfully!'));
-    console.log(chalk.gray('Your bot is ready to start moderating. Run "greatshield start" to begin.\n'));
+    console.log(chalk.green.bold('\nSetup completed successfully!'));
+    console.log(chalk.gray('Run "greatshield start" to begin moderating.\n'));
 
     return config;
   }
 
-  private async collectDiscordConfig(): Promise<{discordToken: string, applicationId: string, publicKey: string, guildId: string}> {
+  private async collectDiscordConfig(): Promise<{
+    discordToken: string;
+    applicationId: string;
+    publicKey: string;
+    guildId: string;
+  }> {
     const questions: any[] = [
       {
         type: 'input',
@@ -72,14 +65,12 @@ export class SetupWizard {
           if (!input || input.trim().length === 0) {
             return 'Bot token is required';
           }
-          // Basic token format validation
           if (!input.match(/^[A-Za-z0-9._-]+$/)) {
             return 'Invalid token format';
           }
           return true;
         },
         transformer: (input: string) => {
-          // Hide token for security
           return input.length > 10 ? input.substring(0, 10) + '...' : input;
         }
       },
@@ -120,21 +111,19 @@ export class SetupWizard {
       }
     ];
 
-    return await inquirer.prompt(questions) as any;
+    return (await inquirer.prompt(questions)) as any;
   }
 
   private async selectPolicyPack(): Promise<number> {
     const policyPacks = await this.db.getPolicyPacks();
-    
-    const choices = policyPacks.map(pack => ({
-      name: `${pack.name} - ${pack.description}`,
+    if (!policyPacks.length) {
+      throw new Error('No policy packs available in the database.');
+    }
+
+    const choices = policyPacks.map((pack) => ({
+      name: `${pack.name} - ${pack.description ?? ''}`.trim(),
       value: pack.id
     }));
-
-    choices.push({
-      name: 'Create new custom policy pack',
-      value: -1
-    });
 
     const { selectedPackId } = await inquirer.prompt([
       {
@@ -142,88 +131,34 @@ export class SetupWizard {
         name: 'selectedPackId',
         message: 'Choose a moderation policy pack:',
         choices,
-        default: 1 // Default to Strict Moderation
+        default: policyPacks[0].id
       }
     ]);
-
-    if (selectedPackId === -1) {
-      return await this.createCustomPolicyPack();
-    }
 
     await this.db.setActivePolicyPack(selectedPackId);
     return selectedPackId;
   }
 
-  private async createCustomPolicyPack(): Promise<number> {
-    console.log(chalk.blue('\nCreating a custom policy pack...'));
-    
-    const questions: any[] = [
-      {
-        type: 'input',
-        name: 'name',
-        message: 'Policy pack name:',
-        validate: (input: string) => input.trim().length > 0 ? true : 'Name is required'
-      },
-      {
-        type: 'input',
-        name: 'description',
-        message: 'Policy pack description:',
-        default: 'Custom moderation policy'
-      },
-      {
-        type: 'number',
-        name: 'toxicityThreshold',
-        message: 'Toxicity detection threshold (0.0-1.0):',
-        default: 0.7,
-        validate: (input: number) => input >= 0 && input <= 1 ? true : 'Must be between 0.0 and 1.0'
-      },
-      {
-        type: 'list',
-        name: 'toxicityAction',
-        message: 'Action for toxic content:',
-        choices: [
-          { name: 'Mask message', value: 'mask' },
-          { name: 'Delete and warn', value: 'delete_warn' },
-          { name: 'Shadowban user', value: 'shadowban' },
-          { name: 'Escalate to moderators', value: 'escalate' }
-        ],
-        default: 'delete_warn'
-      }
-    ];
-
-    await inquirer.prompt(questions);
-
-    // Create custom policy pack in database
-    // This would need additional implementation in DatabaseManager
-    console.log(chalk.yellow('Note: Custom policy pack creation will be implemented in a future update.'));
-    console.log(chalk.gray('Using default "Balanced Moderation" policy for now.\n'));
-    
-    await this.db.setActivePolicyPack(2); // Fallback to Balanced
-    return 2;
-  }
-
-  private async selectAIModel(): Promise<{selectedModel: string, ollamaHost: string}> {
-    // Check if Ollama is installed
+  private async selectAIModel(): Promise<{ selectedModel: string; ollamaHost: string }> {
     const isOllamaInstalled = await this.ollama.checkInstallation();
-    
+
     if (!isOllamaInstalled) {
       const { installOllama } = await inquirer.prompt([
         {
           type: 'confirm',
           name: 'installOllama',
-          message: 'Ollama is not installed. Would you like to install it automatically?',
+          message: 'Ollama is not installed. Install it now?',
           default: true
         }
       ]);
 
-      if (installOllama) {
-        console.log(chalk.blue('Installing Ollama...'));
-        await this.ollama.installOllama();
-        console.log(chalk.green('✅ Ollama installed successfully!'));
-      } else {
-        console.log(chalk.red('❌ Ollama is required for AI moderation. Please install it manually.'));
-        process.exit(1);
+      if (!installOllama) {
+        throw new Error('Ollama is required for AI moderation.');
       }
+
+      console.log(chalk.blue('Installing Ollama...'));
+      await this.ollama.installOllama();
+      console.log(chalk.green('Ollama installed successfully.'));
     }
 
     const modelChoices = [
@@ -267,13 +202,12 @@ export class SetupWizard {
           type: 'input',
           name: 'customModel',
           message: 'Enter the Ollama model name:',
-          validate: (input: string) => input.trim().length > 0 ? true : 'Model name is required'
+          validate: (input: string) => (input.trim().length > 0 ? true : 'Model name is required')
         }
       ]);
       selectedModel = customModel;
     }
 
-    // Check if model is available
     const availableModels = await this.ollama.listModels();
     const modelExists = availableModels.includes(selectedModel);
 
@@ -290,9 +224,9 @@ export class SetupWizard {
       if (downloadModel) {
         console.log(chalk.blue(`Downloading ${selectedModel}... This may take a while.`));
         await this.ollama.pullModel(selectedModel);
-        console.log(chalk.green(`✅ Model ${selectedModel} downloaded successfully!`));
+        console.log(chalk.green(`Model ${selectedModel} downloaded successfully.`));
       } else {
-        console.log(chalk.yellow('⚠️  Model will need to be downloaded before starting the bot.'));
+        console.log(chalk.yellow('Model will need to be downloaded before starting the bot.'));
       }
     }
 
@@ -316,7 +250,7 @@ export class SetupWizard {
     return { selectedModel, ollamaHost };
   }
 
-  private async collectChannelConfig(): Promise<{modLogChannelId: string}> {
+  private async collectChannelConfig(): Promise<{ modLogChannelId: string }> {
     const { modLogChannelId } = await inquirer.prompt([
       {
         type: 'input',
@@ -335,7 +269,6 @@ export class SetupWizard {
   }
 
   private async saveConfiguration(config: WizardConfig): Promise<void> {
-    // Save to database
     const botConfig: BotConfig = {
       guild_id: config.guildId,
       discord_token: config.discordToken,
@@ -350,7 +283,6 @@ export class SetupWizard {
 
     await this.db.updateBotConfig(botConfig);
 
-    // Save to .env file
     const envContent = `# Greatshield Configuration - Generated by Setup Wizard
 DISCORD_TOKEN=${config.discordToken}
 DISCORD_APPLICATION_ID=${config.applicationId}
@@ -368,23 +300,20 @@ PORT=3000
     const envPath = path.resolve('.env');
     fs.writeFileSync(envPath, envContent);
 
-    console.log(chalk.green('\n💾 Configuration saved to database and .env file'));
+    console.log(chalk.green('\nConfiguration saved to database and .env file'));
   }
 
   static async runIfNeeded(db: DatabaseManager, ollama: OllamaManager): Promise<WizardConfig | null> {
-    // Initialize database first
     await db.initialize();
-    
-    // Check if configuration exists
+
     const envPath = path.resolve('.env');
     const envExists = fs.existsSync(envPath);
-    
+
     if (!envExists) {
       const wizard = new SetupWizard(db, ollama);
       return await wizard.run();
     }
 
-    // Check if user wants to reconfigure
     const { reconfigure } = await inquirer.prompt([
       {
         type: 'confirm',

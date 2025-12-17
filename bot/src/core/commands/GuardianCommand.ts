@@ -66,39 +66,39 @@ async function handleStatus(interaction: CommandInteraction, bot: GreatshieldBot
     const activePolicyPack = await bot.db.getActivePolicyPack();
     
     const embed = new EmbedBuilder()
-      .setTitle('🛡️ Greatshield Status')
+      .setTitle('Greatshield Status')
       .setColor(botStatus.botReady ? 0x00FF00 : 0xFF0000)
       .setTimestamp()
       .addFields([
         {
-          name: '🤖 Bot Status',
-          value: botStatus.botReady ? '✅ Online' : '❌ Offline',
+          name: 'Bot Status',
+          value: botStatus.botReady ? 'Online' : 'Offline',
           inline: true
         },
         {
-          name: '⏱️ Uptime',
+          name: 'Uptime',
           value: botStatus.uptime > 0 ? formatUptime(botStatus.uptime) : 'N/A',
           inline: true
         },
         {
-          name: '🏰 Guilds',
+          name: 'Guilds',
           value: botStatus.guildCount.toString(),
           inline: true
         },
         {
-          name: '👥 Users',
+          name: 'Users',
           value: botStatus.userCount.toString(),
           inline: true
         },
         {
-          name: '🧠 Ollama Status',
+          name: 'Ollama Status',
           value: ollamaHealth.isRunning ? 
-            `✅ Running (${ollamaHealth.modelsAvailable} models)` : 
-            '❌ Offline',
+            `Running (${ollamaHealth.modelsAvailable} models)` : 
+            'Offline',
           inline: true
         },
         {
-          name: '🌐 Ollama Host',
+          name: 'Ollama Host',
           value: ollamaHealth.host,
           inline: true
         }
@@ -107,17 +107,17 @@ async function handleStatus(interaction: CommandInteraction, bot: GreatshieldBot
     if (botStatus.config) {
       embed.addFields([
         {
-          name: '🎯 Selected Model',
+          name: 'Selected Model',
           value: botStatus.config.selected_model || 'Not set',
           inline: true
         },
         {
-          name: '📜 Policy Pack',
+          name: 'Policy Pack',
           value: activePolicyPack ? activePolicyPack.name : 'Not set',
           inline: true
         },
         {
-          name: '📋 Mod Log Channel',
+          name: 'Mod Log Channel',
           value: botStatus.config.mod_log_channel_id ? 
             `<#${botStatus.config.mod_log_channel_id}>` : 
             'Not set',
@@ -129,7 +129,7 @@ async function handleStatus(interaction: CommandInteraction, bot: GreatshieldBot
     if (!ollamaHealth.isRunning && ollamaHealth.error) {
       embed.addFields([
         {
-          name: '⚠️ Ollama Error',
+          name: 'Ollama Error',
           value: ollamaHealth.error,
           inline: false
         }
@@ -159,7 +159,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
 
     if (!match) {
       await interaction.editReply({ 
-        content: '❌ Invalid message link format. Please provide a valid Discord message link.' 
+        content: 'Invalid message link format. Please provide a valid Discord message link.' 
       });
       return;
     }
@@ -171,7 +171,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
 
     if (!moderationLog) {
       await interaction.editReply({ 
-        content: '❌ No moderation action found for this message.' 
+        content: 'No moderation action found for this message.' 
       });
       return;
     }
@@ -179,7 +179,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
     // Check if already appealed
     if (moderationLog.is_appeal) {
       await interaction.editReply({ 
-        content: `❌ This message has already been appealed. Status: ${moderationLog.appeal_status}` 
+        content: `This message has already been appealed. Status: ${moderationLog.appeal_status}` 
       });
       return;
     }
@@ -197,39 +197,39 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
 
     // Create appeal embed for mod log
     const embed = new EmbedBuilder()
-      .setTitle('⚖️ Moderation Appeal Submitted')
+      .setTitle('Moderation Appeal Submitted')
       .setColor(0x0099FF)
       .setTimestamp()
       .addFields([
         {
-          name: '👤 Appealed by',
+          name: 'Appealed by',
           value: `<@${interaction.user.id}>`,
           inline: true
         },
         {
-          name: '📍 Original Channel',
+          name: 'Original Channel',
           value: `<#${channelId}>`,
           inline: true
         },
         {
-          name: '⚡ Original Action',
+          name: 'Original Action',
           value: moderationLog.action_taken,
           inline: true
         },
         {
-          name: '📝 Appeal Reason',
+          name: 'Appeal Reason',
           value: reason,
           inline: false
         },
         {
-          name: '💭 Original Message',
+          name: 'Original Message',
           value: moderationLog.message_content.length > 500 
             ? moderationLog.message_content.substring(0, 497) + '...'
             : moderationLog.message_content,
           inline: false
         },
         {
-          name: '🔗 Message Link',
+          name: 'Message Link',
           value: messageLink,
           inline: false
         }
@@ -249,7 +249,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
     }
 
     await interaction.editReply({ 
-      content: '✅ Your appeal has been submitted and will be reviewed by moderators.' 
+      content: 'Your appeal has been submitted and will be reviewed by moderators.' 
     });
 
     bot.logger.info('Moderation appeal submitted', {
@@ -261,7 +261,7 @@ async function handleAppeal(interaction: CommandInteraction, bot: GreatshieldBot
   } catch (error) {
     bot.logger.error('Error processing appeal', { error: String(error) });
     await interaction.editReply({ 
-      content: '❌ An error occurred while processing your appeal. Please try again later.' 
+      content: 'An error occurred while processing your appeal. Please try again later.' 
     });
   }
 }

@@ -26,13 +26,13 @@ export class ModerationLogService implements IModerationLogService {
       }
 
       const embed = new EmbedBuilder()
-        .setTitle('🛡️ Moderation Action')
+        .setTitle('Moderation Action')
         .setColor(this.getColorForAction(log.action_taken))
         .addFields(
           { name: 'User', value: `<@${log.user_id}> (${log.username})`, inline: true },
           { name: 'Channel', value: `<#${log.channel_id}>`, inline: true },
           { name: 'Action', value: log.action_taken, inline: true },
-          { name: 'Detection Type', value: log.detection_type === 'fast_pass' ? '⚡ Fast Pass' : '🤖 AI Analysis', inline: true },
+          { name: 'Detection Type', value: log.detection_type === 'fast_pass' ? 'Fast Pass' : 'AI Analysis', inline: true },
           { name: 'Message Content', value: this.truncateContent(log.message_content), inline: false }
         );
 
