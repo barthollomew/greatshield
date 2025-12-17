@@ -23,8 +23,8 @@ process.on('uncaughtException', (error) => {
   process.exit(1);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled rejection', { reason, promise });
+process.on('unhandledRejection', (reason) => {
+  logger.error('Unhandled rejection', { reason });
   console.error(chalk.red('Unhandled promise rejection:'), reason);
 });
 
@@ -346,7 +346,7 @@ async function main(): Promise<void> {
   await program.parseAsync(process.argv);
 }
 
-main().catch((error) => {
+void main().catch((error) => {
   logger.error('CLI failed', { error: String(error) });
   console.error(chalk.red('Greatshield failed to start:'), error);
   process.exit(1);
